@@ -21,6 +21,7 @@ namespace Micasa
         [DllImport("user32.dll")] static extern uint GetWindowLong(IntPtr hWnd, int nIndex);
         [DllImport("user32.dll")] static extern uint SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
         [DllImport("dwmapi.dll")] static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref DwmMargins pMarInset);
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern IntPtr FindWindowW(string cls, string title);
         [StructLayout(LayoutKind.Sequential)] struct DwmMargins { public int cxLeftWidth, cxRightWidth, cyTopHeight, cyBottomHeight; }
 
         [StructLayout(LayoutKind.Sequential)] struct WinRect  { public int left, top, right, bottom; }
@@ -31,6 +32,8 @@ namespace Micasa
         const int  GWLP_WNDPROC    = -4;
         const int  GWL_STYLE       = -16;
         const int  GWL_EXSTYLE     = -20;
+        const uint WM_ACTIVATE     = 0x0006;
+        const uint WM_ACTIVATEAPP  = 0x001C;
         const uint WM_MOVE         = 0x0003;
         const uint WM_MOVING       = 0x0216;
         const uint WS_CAPTION      = 0x00C00000;
@@ -289,19 +292,12 @@ namespace Micasa
             if (_hwnd == IntPtr.Zero) return;
 
             GetClientRect(_hwnd, out var cr);
-
-            if (!_positionValid || _prevWndProc == IntPtr.Zero)
-            {
-                var pt = new WinPoint();
-                ClientToScreen(_hwnd, ref pt);
-                _clientX = pt.x;
-                _clientY = pt.y;
-                _positionValid = true;
-            }
+            var pt = new WinPoint();
+            ClientToScreen(_hwnd, ref pt);
 
             _cam.transform.position = new Vector3(
-                (_clientX + cr.right  * 0.5f) / PPU,
-                (Display.main.systemHeight - _clientY - cr.bottom * 0.5f) / PPU,
+                (pt.x + cr.right  * 0.5f) / PPU,
+                (Display.main.systemHeight - pt.y - cr.bottom * 0.5f) / PPU,
                 -10f);
             _targetOrthoSize = cr.bottom * 0.5f / PPU;
 #endif
@@ -321,6 +317,12 @@ namespace Micasa
 
         private IntPtr CustomWndProc(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam)
         {
+            // Always report as active so Unity never enters its focus-loss pause path
+            if (msg == WM_ACTIVATEAPP)
+                return CallWindowProc(_prevWndProc, hwnd, msg, new IntPtr(1), lParam);
+            if (msg == WM_ACTIVATE && wParam == IntPtr.Zero)
+                return CallWindowProc(_prevWndProc, hwnd, msg, new IntPtr(1), lParam);
+
             if (msg == WM_MOVING)
             {
                 var wr = Marshal.PtrToStructure<WinRect>(lParam);
@@ -375,6 +377,8 @@ namespace Micasa
             while (_hwnd == IntPtr.Zero)
             {
                 _hwnd = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
+                if (_hwnd == IntPtr.Zero)
+                    _hwnd = FindWindowW(null, Application.productName);
                 yield return null;
             }
             HookWndProc();

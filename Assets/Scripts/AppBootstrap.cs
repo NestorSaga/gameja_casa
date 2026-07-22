@@ -25,6 +25,8 @@ namespace Micasa
 
         private static readonly List<Process> _cameraProcesses = new();
 
+        void OnApplicationFocus(bool _) => Application.runInBackground = true;
+
         void Awake()
         {
             Application.runInBackground = true;
