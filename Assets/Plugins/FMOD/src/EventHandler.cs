@@ -1,9 +1,15 @@
-﻿using UnityEngine;
+using UnityEngine;
+#if UNITY_UI_EXIST
 using UnityEngine.EventSystems;
+#endif
 
 namespace FMODUnity
 {
+#if UNITY_UI_EXIST
     public abstract class EventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+#else
+    public abstract class EventHandler : MonoBehaviour
+#endif
     {
         public string CollisionTag = "";
 
@@ -58,7 +64,7 @@ namespace FMODUnity
         {
             if (string.IsNullOrEmpty(CollisionTag) || other.CompareTag(CollisionTag))
             {
-                HandleGameEvent(EmitterGameEvent.TriggerExit2D);
+                HandleGameEvent(EmitterGameEvent.TriggerEnter2D);
             }
         }
         #endif
@@ -103,6 +109,7 @@ namespace FMODUnity
             HandleGameEvent(EmitterGameEvent.ObjectMouseUp);
         }
 
+        #if UNITY_UI_EXIST
         public void OnPointerEnter(PointerEventData eventData)
         {
             HandleGameEvent(EmitterGameEvent.UIMouseEnter);
@@ -112,6 +119,7 @@ namespace FMODUnity
         {
             HandleGameEvent(EmitterGameEvent.UIMouseExit);
         }
+
         public void OnPointerDown(PointerEventData eventData)
         {
             HandleGameEvent(EmitterGameEvent.UIMouseDown);
@@ -121,6 +129,7 @@ namespace FMODUnity
         {
             HandleGameEvent(EmitterGameEvent.UIMouseUp);
         }
+        #endif
 
         protected abstract void HandleGameEvent(EmitterGameEvent gameEvent);
     }
