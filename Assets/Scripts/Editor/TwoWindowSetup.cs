@@ -1,7 +1,6 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 namespace Micasa.Editor
@@ -39,10 +38,8 @@ namespace Micasa.Editor
             camGo.AddComponent<HostWindowCamera>();
 
             var lightGo = Make(scene, "Global Light 2D");
-            var light = lightGo.AddComponent<Light2D>();
-            light.lightType = Light2D.LightType.Global;
-            light.intensity = 1f;
-            light.color = Color.white;
+            var light2DType = System.Type.GetType("UnityEngine.Rendering.Universal.Light2D, Unity.RenderPipelines.Universal.2D.Runtime");
+            if (light2DType != null) lightGo.AddComponent(light2DType);
 
             var hostMgr = Make(scene, "HostWindowManager");
             hostMgr.AddComponent<HostWindowManager>();
