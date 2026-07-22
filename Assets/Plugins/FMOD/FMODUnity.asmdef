@@ -4,7 +4,7 @@
         "Unity.Timeline",
         "Unity.Addressables",
         "Unity.ResourceManager",
-        "Unity.ugui"
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
