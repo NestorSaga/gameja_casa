@@ -290,7 +290,7 @@ namespace Micasa
 
             GetClientRect(_hwnd, out var cr);
 
-            if (!_positionValid)
+            if (!_positionValid || _prevWndProc == IntPtr.Zero)
             {
                 var pt = new WinPoint();
                 ClientToScreen(_hwnd, ref pt);
