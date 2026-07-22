@@ -34,6 +34,12 @@ namespace Micasa.Bridge
                 OnConnected.Invoke();
             });
 
+            _transport.Disconnected += () => _mainThread.Enqueue(() =>
+            {
+                IsConnected = false;
+                OnDisconnected.Invoke();
+            });
+
             _transport.LineReceived += line => _mainThread.Enqueue(() =>
             {
                 var msg = JsonUtility.FromJson<BridgeMessage>(line);

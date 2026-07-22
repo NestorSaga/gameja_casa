@@ -100,9 +100,10 @@ namespace Micasa
         void Update()
         {
             if (_cam == null || _isCameraMode) return;
-            _cam.orthographicSize   = Mathf.Lerp(_cam.orthographicSize,   _targetOrthoSize, Time.deltaTime * _smoothSpeed);
+            if (!_animating)
+                _cam.orthographicSize = Mathf.Lerp(_cam.orthographicSize, _targetOrthoSize, Time.deltaTime * _smoothSpeed);
             if (!_explorerMode)
-                _cam.transform.position = Vector3.Lerp(_cam.transform.position, _targetPosition,  Time.deltaTime * _smoothSpeed);
+                _cam.transform.position = Vector3.Lerp(_cam.transform.position, _targetPosition, Time.deltaTime * _smoothSpeed);
         }
 
         void OnEnable()  => RenderPipelineManager.beginCameraRendering += OnBeginRender;
@@ -177,9 +178,14 @@ namespace Micasa
             int origW = wr.right  - wr.left;
             int origH = wr.bottom - wr.top;
 
+            // Congelar el aspect de cámara: el contenido se deforma con la ventana
+            _cam.aspect = (float)origW / origH;
+
             yield return AnimateWindowToSize(origW * 2, origH / 3, 0.35f); // achate
             yield return AnimateWindowToSize(origW * 3, origH / 3, 0.25f); // ensanche
             yield return AnimateWindowToSize(origW,     origH,     0.4f);  // original
+
+            _cam.ResetAspect(); // Devuelve el aspect natural de la ventana
             _animating = false;
         }
 
