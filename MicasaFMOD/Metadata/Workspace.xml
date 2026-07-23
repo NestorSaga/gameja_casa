@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Workspace" id="{ca420c28-98ff-4fa7-acb1-c307ce8e2e7a}">
 		<property name="builtBanksOutputDirectory">
-			<value>../Micasa/FMODBanks</value>
+			<value>../FMODBanks/Desktop</value>
 		</property>
 		<relationship name="masterEventFolder">
 			<destination>{232a9fd9-5ee4-4bd9-92e1-aae133115f08}</destination>

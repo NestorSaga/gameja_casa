@@ -14,54 +14,56 @@ namespace Micasa.Bridge
         public UnityEvent OnDisconnected = new();
         public UnityEvent<BridgeMessage> OnMessageReceived = new();
 
-        private NamedPipeTransport _transport;
-        private readonly ConcurrentQueue<Action> _mainThread = new();
+        private NamedPipeTransport              transport;
+        private readonly ConcurrentQueue<Action> mainThread = new();
 
         void Awake()
         {
-            if (Instance != null) { Destroy(gameObject); return; }
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
         }
 
-        public void Initialize(bool asHost)
+        public void Initialize(bool asHost, string h2c = "micasa-h2c", string c2h = "micasa-c2h")
         {
-            _transport = new NamedPipeTransport();
+            transport = new NamedPipeTransport(h2c, c2h);
 
-            _transport.Connected += () => _mainThread.Enqueue(() =>
+            transport.Connected += () => mainThread.Enqueue(() =>
             {
                 IsConnected = true;
                 OnConnected.Invoke();
             });
 
-            _transport.Disconnected += () => _mainThread.Enqueue(() =>
+            transport.Disconnected += () => mainThread.Enqueue(() =>
             {
                 IsConnected = false;
                 OnDisconnected.Invoke();
             });
 
-            _transport.LineReceived += line => _mainThread.Enqueue(() =>
+            transport.LineReceived += line => mainThread.Enqueue(() =>
             {
                 var msg = JsonUtility.FromJson<BridgeMessage>(line);
                 OnMessageReceived.Invoke(msg);
             });
 
-            if (asHost) _transport.StartHost();
-            else _transport.StartClient();
+            if (asHost) transport.StartHost();
+            else        transport.StartClient();
         }
 
-        public void Send(BridgeMessage msg) => _transport?.Send(JsonUtility.ToJson(msg));
+        public void Send(BridgeMessage msg) => transport?.Send(JsonUtility.ToJson(msg));
 
         void Update()
         {
-            while (_mainThread.TryDequeue(out var action)) action();
+            while (mainThread.TryDequeue(out var action)) action();
         }
 
         void OnDestroy()
         {
-            _transport?.Dispose();
+            transport?.Dispose();
             IsConnected = false;
-            Instance = null;
+            if (Instance == this) Instance = null;
         }
     }
 }

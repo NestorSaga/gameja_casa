@@ -5,30 +5,30 @@ namespace Micasa
 {
     public class ClientWindowManager : MonoBehaviour
     {
-        private int _pingsReceived;
-        private int _pongsSent;
-        private string _status = "Connecting to host...";
+        private int    pingsReceived;
+        private int    pongsSent;
+        private string status = "Connecting to host...";
 
         void Start()
         {
             var bridge = WindowBridge.Instance;
-            if (bridge == null) { _status = "No bridge — run from Bootstrap scene."; return; }
+            if (bridge == null) { status = "No bridge — run from Bootstrap scene."; return; }
 
-            bridge.OnConnected.AddListener(() => _status = "Connected to host!");
-            bridge.OnDisconnected.AddListener(() => _status = "Host disconnected.");
+            bridge.OnConnected.AddListener(() => status = "Connected to host!");
+            bridge.OnDisconnected.AddListener(() => status = "Host disconnected.");
             bridge.OnMessageReceived.AddListener(OnMessage);
 
-            if (bridge.IsConnected) _status = "Connected to host!";
+            if (bridge.IsConnected) status = "Connected to host!";
         }
 
         private void OnMessage(BridgeMessage msg)
         {
             if (msg.type != "ping") return;
-            _pingsReceived++;
-            _status = $"Got ping #{_pingsReceived}";
+            pingsReceived++;
+            status = $"Got ping #{pingsReceived}";
 
-            _pongsSent++;
-            WindowBridge.Instance.Send(new BridgeMessage { type = "pong", payload = _pongsSent.ToString() });
+            pongsSent++;
+            WindowBridge.Instance.Send(new BridgeMessage { type = "pong", payload = pongsSent.ToString() });
         }
 
         void OnGUI()
@@ -38,10 +38,10 @@ namespace Micasa
 
             GUILayout.Label("CLIENT WINDOW", LargeLabel());
             GUILayout.Space(12);
-            GUILayout.Label(_status);
+            GUILayout.Label(status);
             GUILayout.Space(20);
-            GUILayout.Label($"Pings received:  {_pingsReceived}");
-            GUILayout.Label($"Pongs sent:      {_pongsSent}");
+            GUILayout.Label($"Pings received:  {pingsReceived}");
+            GUILayout.Label($"Pongs sent:      {pongsSent}");
             GUILayout.Space(8);
             GUILayout.Label("(auto-pongs on every ping)", SmallLabel());
 

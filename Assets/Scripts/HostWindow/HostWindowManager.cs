@@ -5,36 +5,37 @@ namespace Micasa
 {
     public class HostWindowManager : MonoBehaviour
     {
-        private int _pingsSent;
-        private int _pongsReceived;
-        private string _status = "Waiting for client...";
-        private DVDBounce _dvd;
-        private HostWindowCamera _hostCamera;
-
-        private bool _puzzleActive;
+        private int              pingsSent;
+        private int              pongsReceived;
+        private string           status = "Waiting for client...";
+        private DVDBounce        dvd;
+        private HostWindowCamera hostCamera;
+        private bool             puzzleActive;
 
         void Start()
         {
             if (AppBootstrap.CameraViewIndex >= 0) { enabled = false; return; }
 
-            _dvd        = FindAnyObjectByType<DVDBounce>();
-            _hostCamera = FindAnyObjectByType<HostWindowCamera>();
+            AppBootstrap.InitializeHost();
+
+            dvd        = FindAnyObjectByType<DVDBounce>();
+            hostCamera = FindAnyObjectByType<HostWindowCamera>();
 
             var bridge = WindowBridge.Instance;
-            if (bridge == null) { _status = "No bridge — run from Bootstrap scene."; return; }
+            if (bridge == null) { status = "No bridge."; return; }
 
-            bridge.OnConnected.AddListener(() => _status = "Client connected!");
-            bridge.OnDisconnected.AddListener(() => _status = "Client disconnected.");
+            bridge.OnConnected.AddListener(() => status = "Client connected!");
+            bridge.OnDisconnected.AddListener(() => status = "Client disconnected.");
             bridge.OnMessageReceived.AddListener(OnMessage);
 
-            if (bridge.IsConnected) _status = "Client connected!";
+            if (bridge.IsConnected) status = "Client connected!";
         }
 
         private void OnMessage(BridgeMessage msg)
         {
             if (msg.type != "pong") return;
-            _pongsReceived++;
-            _status = $"Got pong #{_pongsReceived}";
+            pongsReceived++;
+            status = $"Got pong #{pongsReceived}";
         }
 
         void OnGUI()
@@ -42,14 +43,10 @@ namespace Micasa
             var area = new Rect(30, 30, 400, Screen.height - 60);
             GUILayout.BeginArea(area);
 
-            if (_puzzleActive)
-            {
+            if (puzzleActive)
                 DrawPuzzleUI();
-            }
             else
-            {
                 DrawHostUI();
-            }
 
             GUILayout.EndArea();
         }
@@ -58,10 +55,10 @@ namespace Micasa
         {
             GUILayout.Label("HOST WINDOW", LargeLabel());
             GUILayout.Space(12);
-            GUILayout.Label(_status);
+            GUILayout.Label(status);
             GUILayout.Space(20);
-            GUILayout.Label($"Pings sent:      {_pingsSent}");
-            GUILayout.Label($"Pongs received:  {_pongsReceived}");
+            GUILayout.Label($"Pings sent:      {pingsSent}");
+            GUILayout.Label($"Pongs received:  {pongsReceived}");
             GUILayout.Space(20);
 
             var bridge = WindowBridge.Instance;
@@ -70,38 +67,49 @@ namespace Micasa
             {
                 if (GUILayout.Button("Open Client", GUILayout.Width(120), GUILayout.Height(44)))
                     AppBootstrap.LaunchClientProcess();
-                GUILayout.Space(10);
+                GUILayout.Space(4);
             }
+
+            GUILayout.Label("Gnome Windows");
+            if (GUILayout.Button("Gnome",       GUILayout.Width(120), GUILayout.Height(36)))
+                AppBootstrap.LaunchGnomeWindow();
+            GUILayout.Space(2);
+            if (GUILayout.Button("Gnomeophone", GUILayout.Width(120), GUILayout.Height(36)))
+                AppBootstrap.LaunchGnomophoneWindow();
+            GUILayout.Space(2);
+            if (GUILayout.Button("Gnome 2",     GUILayout.Width(120), GUILayout.Height(36)))
+                AppBootstrap.LaunchGnome2Window();
+            GUILayout.Space(10);
 
             GUI.enabled = bridge != null && bridge.IsConnected;
             if (GUILayout.Button("Ping  →", GUILayout.Width(120), GUILayout.Height(44)))
             {
-                _pingsSent++;
-                bridge.Send(new BridgeMessage { type = "ping", payload = _pingsSent.ToString() });
-                _status = $"Sent ping #{_pingsSent}";
+                pingsSent++;
+                bridge.Send(new BridgeMessage { type = "ping", payload = pingsSent.ToString() });
+                status = $"Sent ping #{pingsSent}";
             }
             GUI.enabled = true;
 
-            if (_dvd != null)
+            if (dvd != null)
             {
                 GUILayout.Space(10);
-                if (GUILayout.Button(_dvd.IsBouncing ? "Stop DVD" : "DVD", GUILayout.Width(120), GUILayout.Height(44)))
-                    _dvd.Toggle();
+                if (GUILayout.Button(dvd.IsBouncing ? "Stop DVD" : "DVD", GUILayout.Width(120), GUILayout.Height(44)))
+                    dvd.Toggle();
             }
 
             GUILayout.Space(20);
             if (GUILayout.Button("Squish Test", GUILayout.Width(120), GUILayout.Height(44)))
-                _hostCamera?.PlaySquishAnimation();
+                hostCamera?.PlaySquishAnimation();
 
             GUILayout.Space(4);
-            bool transparent = _hostCamera != null && _hostCamera.IsTransparent;
+            bool transparent = hostCamera != null && hostCamera.IsTransparent;
             if (GUILayout.Button(transparent ? "Opaque" : "Transparent", GUILayout.Width(120), GUILayout.Height(44)))
-                _hostCamera?.ToggleTransparency();
+                hostCamera?.ToggleTransparency();
 
             GUILayout.Space(8);
-            bool exploring = _hostCamera != null && _hostCamera.ExplorerMode;
+            bool exploring = hostCamera != null && hostCamera.ExplorerMode;
             if (GUILayout.Button(exploring ? "Overview" : "Explorer", GUILayout.Width(120), GUILayout.Height(44)))
-                _hostCamera?.ToggleExplorerMode();
+                hostCamera?.ToggleExplorerMode();
 
             GUILayout.Space(8);
             if (GUILayout.Button("Start Puzzle", GUILayout.Width(120), GUILayout.Height(44)))
@@ -116,15 +124,15 @@ namespace Micasa
                 StopPuzzle();
         }
 
-        private void StartPuzzle()
+        public void StartPuzzle()
         {
             // screenPositions[viewIndex] = cuadrante de pantalla asignado
             int[] screenPositions = ShuffledRange(AppBootstrap.CameraCount);
             int   hostViewIndex   = UnityEngine.Random.Range(0, AppBootstrap.CameraCount);
             int   hostScreenPos   = screenPositions[hostViewIndex];
 
-            _puzzleActive = true;
-            _hostCamera?.EnterCameraMode(hostViewIndex, hostScreenPos);
+            puzzleActive = true;
+            hostCamera?.EnterCameraMode(hostViewIndex, hostScreenPos);
             AppBootstrap.LaunchCameraProcesses(hostViewIndex, screenPositions);
         }
 
@@ -140,11 +148,11 @@ namespace Micasa
             return arr;
         }
 
-        private void StopPuzzle()
+        public void StopPuzzle()
         {
-            _puzzleActive = false;
+            puzzleActive = false;
             AppBootstrap.KillCameraProcesses();
-            _hostCamera?.ExitCameraMode();
+            hostCamera?.ExitCameraMode();
         }
 
         private static GUIStyle LargeLabel() =>

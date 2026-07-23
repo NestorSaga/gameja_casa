@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2c08aefce295045b3b485c120c7a46, type: 3}
+  m_Name: Stage1
+  m_EditorClassIdentifier: Assembly-CSharp::Micasa.StageData
+  id: 0
+  steps:
+  - delay: 0
+    actions: 00000000
+    targetVolume: 1
+    gnome:
+      text: 
+      textDuration: 0
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      text: 
+      textDuration: 0
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      text: 
+      textDuration: 0
+      fmodPlay: []
+      fmodStop: []
+  - delay: 0
+    actions: 01000000
+    targetVolume: 1
+    gnome:
+      text: 
+      textDuration: 0
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      text: 
+      textDuration: 0
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      text: 
+      textDuration: 0
+      fmodPlay: []
+      fmodStop: []
+  - delay: 4
+    actions: 
+    targetVolume: 1
+    gnome:
+      text: HEHEHEHEHEHEHEH
+      textDuration: 40
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      text: 
+      textDuration: 0
+      fmodPlay:
+      - Guid:
+          Data1: -1757616981
+          Data2: 1133767070
+          Data3: -1032140155
+          Data4: -809267173
+        Path: event:/Master/goof 2
+      fmodStop: []
+    gnome2:
+      text: 
+      textDuration: 0
+      fmodPlay: []
+      fmodStop: []

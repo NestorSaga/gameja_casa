@@ -261,10 +261,10 @@ namespace FMODUnity
                 if ((TypeFilter & TypeFilter.Event) != 0)
                 {
                     CreateSubTree("Events", EventPrefix,
-                        EventManager.Events.Where(e => e.Path.StartsWith(EventPrefix)), e => e.Path);
+                        EventManager.Events.Where(e => e != null && e.Path != null && e.Path.StartsWith(EventPrefix)), e => e.Path);
 
                     CreateSubTree("Snapshots", SnapshotPrefix,
-                        EventManager.Events.Where(e => e.Path.StartsWith(SnapshotPrefix)), s => s.Path);
+                        EventManager.Events.Where(e => e != null && e.Path != null && e.Path.StartsWith(SnapshotPrefix)), s => s.Path);
                 }
 
                 if ((TypeFilter & TypeFilter.Bank) != 0)
@@ -350,7 +350,7 @@ namespace FMODUnity
             private Texture2D IconForRecord(ScriptableObject record)
             {
                 EditorEventRef eventRef = record as EditorEventRef;
-                if (eventRef != null)
+                if (eventRef != null && eventRef.Path != null)
                 {
                     if (eventRef.Path.StartsWith(SnapshotPrefix))
                     {
@@ -812,11 +812,11 @@ namespace FMODUnity
                     {
                         EditorEventRef eventRef = selectedObject as EditorEventRef;
 
-                        if (eventRef.Path.StartsWith("event:"))
+                        if (eventRef.Path != null && eventRef.Path.StartsWith("event:"))
                         {
                             DrawEventPreview(eventRef, metering);
                         }
-                        else if (eventRef.Path.StartsWith("snapshot:"))
+                        else if (eventRef.Path != null && eventRef.Path.StartsWith("snapshot:"))
                         {
                             detailsView.DrawSnapshot(eventRef);
                         }

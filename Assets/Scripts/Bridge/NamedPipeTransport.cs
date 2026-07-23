@@ -12,64 +12,80 @@ namespace Micasa.Bridge
     //   micasa-c2h — client writes, host reads
     public class NamedPipeTransport : IDisposable
     {
-        private const string H2C = "micasa-h2c";
-        private const string C2H = "micasa-c2h";
+        private readonly string h2cName;
+        private readonly string c2hName;
+
+        public NamedPipeTransport(string h2c = "micasa-h2c", string c2h = "micasa-c2h")
+        {
+            h2cName = h2c;
+            c2hName = c2h;
+        }
 
         public event Action         Connected;
         public event Action         Disconnected;
         public event Action<string> LineReceived;
 
-        private readonly ConcurrentQueue<string> _outbox = new();
-        private PipeStream   _sendPipe;
-        private PipeStream   _recvPipe;
-        private volatile bool _running;
+        private readonly ConcurrentQueue<string> outbox = new();
+        private PipeStream    sendPipe;
+        private PipeStream    recvPipe;
+        private volatile bool running;
+        private Thread        loopThread;
 
         public void StartHost()
         {
-            _running = true;
-            new Thread(HostLoop) { IsBackground = true, Name = "Pipe-Host" }.Start();
+#if UNITY_EDITOR
+            return;
+#endif
+            running    = true;
+            loopThread = new Thread(HostLoop) { IsBackground = true, Name = "Pipe-Host" };
+            loopThread.Start();
         }
 
         public void StartClient()
         {
-            _running = true;
-            new Thread(ClientLoop) { IsBackground = true, Name = "Pipe-Client" }.Start();
+#if UNITY_EDITOR
+            return;
+#endif
+            running    = true;
+            loopThread = new Thread(ClientLoop) { IsBackground = true, Name = "Pipe-Client" };
+            loopThread.Start();
         }
 
-        public void Send(string line) => _outbox.Enqueue(line);
+        public void Send(string line) => outbox.Enqueue(line);
 
         // ── Host ──────────────────────────────────────────────────────────
 
         private void HostLoop()
         {
-            while (_running)
+            while (running)
             {
                 NamedPipeServerStream send = null;
                 NamedPipeServerStream recv = null;
                 try
                 {
-                    send = new NamedPipeServerStream(H2C, PipeDirection.Out, 1);
-                    recv = new NamedPipeServerStream(C2H, PipeDirection.In,  1);
-                    _sendPipe = send;
-                    _recvPipe = recv;
+                    send = new NamedPipeServerStream(h2cName, PipeDirection.Out, 1);
+                    recv = new NamedPipeServerStream(c2hName, PipeDirection.In,  1);
+                    sendPipe = send;
+                    recvPipe = recv;
 
                     Debug.Log("[Pipe] Host waiting for client…");
                     send.WaitForConnection();
-                    if (!_running) break;
+                    if (!running) break;
                     recv.WaitForConnection();
-                    if (!_running) break;
+                    if (!running) break;
 
                     Debug.Log("[Pipe] Client connected");
                     Connected?.Invoke();
 
                     var readThread = new Thread(() => ReadLoop(recv)) { IsBackground = true, Name = "Pipe-Read" };
                     readThread.Start();
-                    WriteLoop(send);
+                    WriteLoop(send, readThread);
                     readThread.Join(500);
                 }
+                catch (ThreadInterruptedException) { break; }
                 catch (Exception e)
                 {
-                    if (_running) Debug.LogWarning($"[Pipe] Host error: {e.Message}");
+                    if (running) Debug.LogWarning($"[Pipe] Host error: {e.Message}");
                 }
                 finally
                 {
@@ -77,11 +93,11 @@ namespace Micasa.Bridge
                     SafeClose(recv);
                 }
 
-                if (_running)
+                if (running)
                 {
                     Disconnected?.Invoke();
                     Debug.Log("[Pipe] Host awaiting reconnect…");
-                    Thread.Sleep(500);
+                    try { Thread.Sleep(500); } catch (ThreadInterruptedException) { break; }
                 }
             }
         }
@@ -90,34 +106,35 @@ namespace Micasa.Bridge
 
         private void ClientLoop()
         {
-            while (_running)
+            while (running)
             {
                 NamedPipeClientStream recv = null;
                 NamedPipeClientStream send = null;
                 try
                 {
-                    recv = new NamedPipeClientStream(".", H2C, PipeDirection.In);
-                    send = new NamedPipeClientStream(".", C2H, PipeDirection.Out);
-                    _recvPipe = recv;
-                    _sendPipe = send;
+                    recv = new NamedPipeClientStream(".", h2cName, PipeDirection.In);
+                    send = new NamedPipeClientStream(".", c2hName, PipeDirection.Out);
+                    recvPipe = recv;
+                    sendPipe = send;
 
                     Debug.Log("[Pipe] Client connecting…");
                     recv.Connect(10_000);
-                    if (!_running) break;
+                    if (!running) break;
                     send.Connect(10_000);
-                    if (!_running) break;
+                    if (!running) break;
 
                     Debug.Log("[Pipe] Connected to host");
                     Connected?.Invoke();
 
                     var readThread = new Thread(() => ReadLoop(recv)) { IsBackground = true, Name = "Pipe-Read" };
                     readThread.Start();
-                    WriteLoop(send);
+                    WriteLoop(send, readThread);
                     readThread.Join(500);
                 }
+                catch (ThreadInterruptedException) { break; }
                 catch (Exception e)
                 {
-                    if (_running) Debug.LogWarning($"[Pipe] Client error: {e.Message}");
+                    if (running) Debug.LogWarning($"[Pipe] Client error: {e.Message}");
                 }
                 finally
                 {
@@ -125,11 +142,11 @@ namespace Micasa.Bridge
                     SafeClose(send);
                 }
 
-                if (_running)
+                if (running)
                 {
                     Disconnected?.Invoke();
                     Debug.Log("[Pipe] Client awaiting reconnect…");
-                    Thread.Sleep(1000);
+                    try { Thread.Sleep(1000); } catch (ThreadInterruptedException) { break; }
                 }
             }
         }
@@ -141,7 +158,7 @@ namespace Micasa.Bridge
             try
             {
                 var reader = new StreamReader(pipe);
-                while (_running)
+                while (running)
                 {
                     var line = reader.ReadLine();
                     if (line == null) break;
@@ -150,18 +167,18 @@ namespace Micasa.Bridge
             }
             catch (Exception e)
             {
-                if (_running) Debug.LogWarning($"[Pipe] Read error: {e.Message}");
+                if (running) Debug.LogWarning($"[Pipe] Read error: {e.Message}");
             }
         }
 
-        private void WriteLoop(PipeStream pipe)
+        private void WriteLoop(PipeStream pipe, Thread readThread)
         {
             try
             {
                 var writer = new StreamWriter(pipe) { AutoFlush = true };
-                while (_running && pipe.IsConnected)
+                while (running && pipe.IsConnected && readThread.IsAlive)
                 {
-                    if (_outbox.TryDequeue(out var line))
+                    if (outbox.TryDequeue(out var line))
                         writer.WriteLine(line);
                     else
                         Thread.Sleep(10);
@@ -169,7 +186,7 @@ namespace Micasa.Bridge
             }
             catch (Exception e)
             {
-                if (_running) Debug.LogWarning($"[Pipe] Write error: {e.Message}");
+                if (running) Debug.LogWarning($"[Pipe] Write error: {e.Message}");
             }
         }
 
@@ -182,9 +199,11 @@ namespace Micasa.Bridge
 
         public void Dispose()
         {
-            _running = false;
-            SafeClose(_sendPipe);
-            SafeClose(_recvPipe);
+            running = false;
+            SafeClose(sendPipe);
+            SafeClose(recvPipe);
+            try { loopThread?.Interrupt(); } catch { }
+            loopThread?.Join(500);
         }
     }
 }

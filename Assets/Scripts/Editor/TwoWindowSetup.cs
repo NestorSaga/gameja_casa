@@ -10,9 +10,9 @@ namespace Micasa.Editor
         [MenuItem("Micasa/Setup Two-Window System")]
         public static void Setup()
         {
+            CreateBootstrapScene();
             CreateHostScene();
             CreateClientScene();
-            AddBootstrapToSampleScene();
             UpdateBuildSettings();
             ConfigurePlayerSettings();
 
@@ -21,6 +21,15 @@ namespace Micasa.Editor
             Debug.Log("[TwoWindowSetup] Done.");
         }
 
+        // ── Bootstrap ─────────────────────────────────────────────────────
+
+        private static void CreateBootstrapScene()
+        {
+            const string path = "Assets/Scenes/BootstrapScene.unity";
+            var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            Make(scene, "AppBootstrap").AddComponent<AppBootstrap>();
+            EditorSceneManager.SaveScene(scene, path);
+        }
 
         // ── Host ─────────────────────────────────────────────────────────
 
@@ -66,32 +75,20 @@ namespace Micasa.Editor
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/ClientScene.unity");
         }
 
-        // ── Bootstrap ─────────────────────────────────────────────────────
-
-        private static void AddBootstrapToSampleScene()
-        {
-            const string path = "Assets/Scenes/SampleScene.unity";
-            var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Additive);
-
-            foreach (var go in scene.GetRootGameObjects())
-                if (go.GetComponent<AppBootstrap>() != null) { EditorSceneManager.CloseScene(scene, false); return; }
-
-            Make(scene, "AppBootstrap").AddComponent<AppBootstrap>();
-
-            EditorSceneManager.MarkSceneDirty(scene);
-            EditorSceneManager.SaveScene(scene);
-            EditorSceneManager.CloseScene(scene, false);
-        }
-
-        // ── Shared ────────────────────────────────────────────────────────
+        // ── Build Settings ────────────────────────────────────────────────
 
         private static void UpdateBuildSettings()
         {
             EditorBuildSettings.scenes = new[]
             {
-                new EditorBuildSettingsScene("Assets/Scenes/SampleScene.unity", true),
-                new EditorBuildSettingsScene("Assets/Scenes/HostScene.unity",   true),
-                new EditorBuildSettingsScene("Assets/Scenes/ClientScene.unity", true),
+                new EditorBuildSettingsScene("Assets/Scenes/BootstrapScene.unity",    true),
+                new EditorBuildSettingsScene("Assets/Scenes/MainMenu.unity",          true),
+                new EditorBuildSettingsScene("Assets/Scenes/SampleScene.unity",       true),
+                new EditorBuildSettingsScene("Assets/Scenes/HostScene.unity",         true),
+                new EditorBuildSettingsScene("Assets/Scenes/ClientScene.unity",       true),
+                new EditorBuildSettingsScene("Assets/Scenes/GnomeScene.unity",        false),
+                new EditorBuildSettingsScene("Assets/Scenes/GnomophoneScene.unity",   false),
+                new EditorBuildSettingsScene("Assets/Scenes/Gnome2Scene.unity",       false),
             };
         }
 

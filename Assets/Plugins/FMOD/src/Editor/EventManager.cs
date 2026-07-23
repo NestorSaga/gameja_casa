@@ -394,7 +394,7 @@ namespace FMODUnity
         private static void UpdateCacheBank(EditorBankRef bankRef, ref bool renameOccurred)
         {
             // Clear out any cached events from this bank
-            eventCache.EditorEvents.ForEach((x) => x.Banks.Remove(bankRef));
+            eventCache.EditorEvents.ForEach((x) => { if (x != null) x.Banks.Remove(bankRef); });
 
             FMOD.Studio.Bank bank;
             FMOD.RESULT loadResult = EditorUtils.System.loadBankFile(bankRef.Path, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out bank);
@@ -1219,7 +1219,7 @@ namespace FMODUnity
         public static EditorEventRef EventFromString(string path)
         {
             AffirmEventCache();
-            return eventCache.EditorEvents.Find((x) => x.Path.Equals(path, StringComparison.CurrentCultureIgnoreCase));
+            return eventCache.EditorEvents.Find((x) => x != null && x.Path != null && x.Path.Equals(path, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public static EditorEventRef EventFromGUID(FMOD.GUID guid)
