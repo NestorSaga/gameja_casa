@@ -44,6 +44,7 @@ namespace Micasa
     public class StageData : ScriptableObject
     {
         public int             id;
+        public int             collectiblesRequired = 3;
         public List<StageStep> steps = new();
     }
 }

@@ -15,7 +15,7 @@ namespace Micasa
             origin = transform.position;
         }
 
-        void Update()
+        void FixedUpdate()
         {
             if (target == null) return;
 

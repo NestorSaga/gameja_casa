@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Stage1
   m_EditorClassIdentifier: Assembly-CSharp::Micasa.StageData
   id: 0
+  collectiblesRequired: 3
   steps:
   - delay: 0
-    actions: 00000000
+    actions: 0000000001000000
     targetVolume: 1
     gnome:
       text: 
@@ -32,30 +33,12 @@ MonoBehaviour:
       textDuration: 0
       fmodPlay: []
       fmodStop: []
-  - delay: 0
-    actions: 01000000
+  - delay: 2
+    actions: 09000000
     targetVolume: 1
     gnome:
       text: 
       textDuration: 0
-      fmodPlay: []
-      fmodStop: []
-    gnomeophone:
-      text: 
-      textDuration: 0
-      fmodPlay: []
-      fmodStop: []
-    gnome2:
-      text: 
-      textDuration: 0
-      fmodPlay: []
-      fmodStop: []
-  - delay: 4
-    actions: 
-    targetVolume: 1
-    gnome:
-      text: HEHEHEHEHEHEHEH
-      textDuration: 40
       fmodPlay: []
       fmodStop: []
     gnomeophone:
