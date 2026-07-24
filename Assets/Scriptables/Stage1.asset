@@ -15,35 +15,42 @@ MonoBehaviour:
   id: 0
   collectiblesRequired: 3
   steps:
-  - delay: 0
-    actions: 0000000001000000
+  - delay: 10
+    actions: 00000000
     targetVolume: 1
     gnome:
-      text: 
-      textDuration: 0
+      lines: []
       fmodPlay: []
       fmodStop: []
     gnomeophone:
-      text: 
-      textDuration: 0
+      lines: []
       fmodPlay: []
       fmodStop: []
     gnome2:
-      text: 
-      textDuration: 0
+      lines: []
       fmodPlay: []
       fmodStop: []
-  - delay: 2
-    actions: 09000000
+  - delay: 1.5
+    actions: 
     targetVolume: 1
     gnome:
-      text: 
-      textDuration: 0
+      lines:
+      - text: "Trufas y amanitas! Qu\xE9 es tanto ruido!!"
+        delay: 4
+      - text: Pero si es {PlayerPCName}! Otra vez...
+        delay: 4
+      - text: "O sea que no solo entras cada d\xEDa a <b>MI</b> casa..."
+        delay: 4
+      - text: ...es que la usas para jugar pura basura!
+        delay: 4
+      - text: Mira, me tienes hasta los hongos!
+        delay: 4
+      - text: "Espera que primero saco mi set\xF3fono"
+        delay: 4
       fmodPlay: []
       fmodStop: []
     gnomeophone:
-      text: 
-      textDuration: 0
+      lines: []
       fmodPlay:
       - Guid:
           Data1: -1757616981
@@ -53,7 +60,98 @@ MonoBehaviour:
         Path: event:/Master/goof 2
       fmodStop: []
     gnome2:
-      text: 
-      textDuration: 0
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 30
+    actions: 01000000
+    targetVolume: 1
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 2
+    actions: 
+    targetVolume: 1
+    gnome:
+      lines:
+      - text: "Ya me joder\xEDa escuchar <b>Shroom n Bass</b>"
+        delay: 4
+      - text: "Ah\xED va un poco de <b>Leprechrust</b>"
+        delay: 4
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 10
+    actions: 
+    targetVolume: 1
+    gnome:
+      lines:
+      - text: "Al menos mis o\xEDdos pueden descansar"
+        delay: 4
+      - text: <b>De nada</b>
+        delay: 4
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay:
+      - Guid:
+          Data1: -1757616981
+          Data2: 1133767070
+          Data3: -1032140155
+          Data4: -809267173
+        Path: event:/Master/goof 2
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 9
+    actions: 
+    targetVolume: 1
+    gnome:
+      lines:
+      - text: "Te he estado observando desde a\xF1os"
+        delay: 4
+      - text: "Siempre a\xF1adiendo m\xE1s basura a <b>mi</b> escritorio"
+        delay: 4
+      - text: Y buscando <b>"Patas sucias encima de la cara"</b> en internet
+        delay: 4
+      - text: "Adem\xE1s eres mal\xEDsimo en todos los juegos"
+        delay: 4
+      - text: Voy a quedarme a mirar como dejas este
+        delay: 4
+      - text: "del rid\xEDculo que haces"
+        delay: 4
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay:
+      - Guid:
+          Data1: -1757616981
+          Data2: 1133767070
+          Data3: -1032140155
+          Data4: -809267173
+        Path: event:/Master/goof 2
+      fmodStop: []
+    gnome2:
+      lines: []
       fmodPlay: []
       fmodStop: []

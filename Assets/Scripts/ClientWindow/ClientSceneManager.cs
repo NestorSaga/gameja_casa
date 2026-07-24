@@ -12,7 +12,7 @@ namespace Micasa
         [SerializeField] TMP_Text textDisplay;
 
         private readonly Dictionary<string, EventInstance> playing = new();
-        private Coroutine hideText;
+        private Coroutine dialogueCoroutine;
 
         void Start()
         {
@@ -26,18 +26,30 @@ namespace Micasa
         {
             switch (msg.type)
             {
-                case "show-text": ShowText(msg.payload); break;
+                case "show-text-sequence": StartTextSequence(msg.payload); break;
                 case "fmod-play": PlayFmod(msg.payload); break;
                 case "fmod-stop": StopFmod(msg.payload); break;
             }
         }
 
-        private void ShowText(string text)
+        private void StartTextSequence(string json)
         {
             if (textDisplay == null) return;
-            if (hideText != null) StopCoroutine(hideText);
-            textDisplay.text = TextResolver.Resolve(text);
-            textDisplay.gameObject.SetActive(true);
+            if (dialogueCoroutine != null) StopCoroutine(dialogueCoroutine);
+            var seq = JsonUtility.FromJson<DialogueSequence>(json);
+            dialogueCoroutine = StartCoroutine(RunDialogueSequence(seq.lines));
+        }
+
+        private IEnumerator RunDialogueSequence(List<DialogueLine> lines)
+        {
+            foreach (var line in lines)
+            {
+                if (line.delay > 0f)
+                    yield return new WaitForSeconds(line.delay);
+                textDisplay.text = TextResolver.Resolve(line.text);
+                textDisplay.gameObject.SetActive(true);
+            }
+            dialogueCoroutine = null;
         }
 
         private void PlayFmod(string guidStr)

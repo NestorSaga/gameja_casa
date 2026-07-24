@@ -126,6 +126,8 @@ namespace Micasa
 
         public void StartPuzzle()
         {
+            if (puzzleActive) return;
+
             // screenPositions[viewIndex] = cuadrante de pantalla asignado
             int[] screenPositions = ShuffledRange(AppBootstrap.CameraCount);
             int   hostViewIndex   = UnityEngine.Random.Range(0, AppBootstrap.CameraCount);

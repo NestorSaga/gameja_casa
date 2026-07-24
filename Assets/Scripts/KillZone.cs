@@ -6,6 +6,7 @@ namespace Micasa
     {
         void OnTriggerEnter2D(Collider2D other)
         {
+            if (AppBootstrap.CameraViewIndex >= 0) return;
             if (other.CompareTag("Player"))
                 GameManager.Instance?.KillPlayer();
         }

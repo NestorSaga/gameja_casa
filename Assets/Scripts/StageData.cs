@@ -17,13 +17,31 @@ namespace Micasa
         PlaySquishAnimation,
         ToggleDVDBounce,
         SetWindowsVolume,
+        SelfDestruct,
+        StretchFull,
+        StretchWide,
+        StretchTall,
+        StretchLoop,
+        StopStretch,
+    }
+
+    [Serializable]
+    public class DialogueLine
+    {
+        public string text;
+        public float  delay;
+    }
+
+    [Serializable]
+    public class DialogueSequence
+    {
+        public List<DialogueLine> lines;
     }
 
     [Serializable]
     public class WindowStepData
     {
-        public string              text;
-        public float               textDuration;
+        public List<DialogueLine>   lines    = new();
         public List<EventReference> fmodPlay = new();
         public List<EventReference> fmodStop = new();
     }

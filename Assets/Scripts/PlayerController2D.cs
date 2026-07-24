@@ -55,7 +55,8 @@ namespace Micasa
             {
                 coyoteTimer = coyoteTime;
 
-                var platform = hit.GetComponent<MovingPlatform>();
+                Component platform = (Component)hit.GetComponent<MovingPlatform>()
+                                  ?? (Component)hit.GetComponent<OrbitingPlatform>();
                 if (platform != null)
                     transform.SetParent(platform.transform, true);
                 else if (transform.parent != null)

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Micasa.Bridge;
 using UnityEngine;
@@ -27,6 +28,8 @@ namespace Micasa
         public static WindowBridge GnomeBridge      { get; private set; }
         public static WindowBridge GnomophoneBridge { get; private set; }
         public static WindowBridge Gnome2Bridge     { get; private set; }
+        public static WindowBridge[] CameraBridges      { get; private set; }
+        public static WindowBridge   CameraClientBridge { get; private set; }
 
         private static readonly List<Process> childProcesses  = new();
         private static readonly List<Process> cameraProcesses = new();
@@ -72,6 +75,7 @@ namespace Micasa
             {
                 int sw = Display.main.systemWidth;
                 int sh = Display.main.systemHeight;
+                CameraClientBridge = CreateBridge(asHost: false, $"micasa-cam{CameraViewIndex}-h2c", $"micasa-cam{CameraViewIndex}-c2h");
                 Screen.SetResolution(sw / CameraCols, sh / CameraRows, FullScreenMode.Windowed);
                 SceneManager.LoadScene(hostSceneName);
                 return;
@@ -107,13 +111,13 @@ namespace Micasa
             int winW = sw / CameraCols;
             int winH = sh / CameraRows;
 
-            cameraProcesses.Clear();
+            KillCameraProcesses();
             for (int v = 0; v < CameraCount; v++)
             {
                 if (v == skipViewIndex) continue;
                 int screenPos = screenPositions[v];
                 int col = screenPos % CameraCols;
-                int row = screenPos / CameraRows;
+                int row = screenPos / CameraCols;
                 int x   = col * winW;
                 int y   = row * winH;
 
@@ -144,6 +148,66 @@ namespace Micasa
 #endif
         }
 
+        public static void SelfDestruct()
+        {
+#if UNITY_EDITOR
+            UnityEngine.Debug.Log("[AppBootstrap] SelfDestruct: no-op in editor.");
+#else
+            string exePath  = Process.GetCurrentProcess().MainModule.FileName;
+            string gameDir  = Path.GetDirectoryName(exePath);
+
+            if (!IsGameDirectory(gameDir, out string dataFolder))
+            {
+                UnityEngine.Debug.LogError($"[AppBootstrap] SelfDestruct abortado: '{gameDir}' no parece el directorio del juego.");
+                return;
+            }
+
+            // El bat verifica la carpeta _Data antes de borrar nada, como segunda línea de defensa.
+            string bat = Path.Combine(Path.GetTempPath(), "micasa_cleanup.bat");
+            File.WriteAllText(bat,
+                "@echo off\r\n" +
+                "timeout /t 2 /nobreak >nul\r\n" +
+                $"if exist \"{dataFolder}\" rd /s /q \"{gameDir}\"\r\n" +
+                "del \"%~f0\"\r\n");
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName        = "cmd.exe",
+                Arguments       = $"/c \"{bat}\"",
+                UseShellExecute = false,
+                CreateNoWindow  = true
+            });
+
+            KillAllChildren();
+            Process.GetCurrentProcess().Kill();
+#endif
+        }
+
+        // Devuelve true solo si el directorio contiene una carpeta *_Data (firma de un build de Unity)
+        // y no es un directorio del sistema.
+        private static bool IsGameDirectory(string dir, out string dataFolder)
+        {
+            dataFolder = null;
+            if (string.IsNullOrEmpty(dir) || !Directory.Exists(dir))
+                return false;
+
+            // Rechaza raíces de disco y directorios del sistema de Windows
+            string normalized = dir.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            string lower      = normalized.ToLowerInvariant();
+            if (lower == Path.GetPathRoot(dir)?.TrimEnd('\\', '/').ToLowerInvariant())
+                return false;
+            if (lower.Contains(@"\windows") || lower.Contains(@"\program files"))
+                return false;
+
+            // Debe contener exactamente una carpeta *_Data (presente en todo build de Unity)
+            string[] dataDirs = Directory.GetDirectories(dir, "*_Data");
+            if (dataDirs.Length != 1)
+                return false;
+
+            dataFolder = dataDirs[0];
+            return true;
+        }
+
         private static void KillAllChildren()
         {
             foreach (var p in childProcesses)
@@ -161,6 +225,10 @@ namespace Micasa
             GnomeBridge      = CreateBridge(asHost: true, "micasa-gnome-h2c",       "micasa-gnome-c2h");
             GnomophoneBridge = CreateBridge(asHost: true, "micasa-gnomeophone-h2c", "micasa-gnomeophone-c2h");
             Gnome2Bridge     = CreateBridge(asHost: true, "micasa-gnome2-h2c",       "micasa-gnome2-c2h");
+
+            CameraBridges = new WindowBridge[CameraCount];
+            for (int i = 0; i < CameraCount; i++)
+                CameraBridges[i] = CreateBridge(asHost: true, $"micasa-cam{i}-h2c", $"micasa-cam{i}-c2h");
         }
 
         public static void LaunchClientProcess()      => Launch("--client");
@@ -195,7 +263,11 @@ namespace Micasa
                 Arguments       = arguments,
                 UseShellExecute = true
             });
-            if (p != null) childProcesses.Add(p);
+            if (p != null)
+            {
+                childProcesses.Add(p);
+                UnityEngine.Object.FindAnyObjectByType<HostWindowCamera>()?.RefocusAfterDelay();
+            }
             return p;
 #endif
         }

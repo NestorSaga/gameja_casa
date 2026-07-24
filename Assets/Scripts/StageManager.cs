@@ -1,5 +1,4 @@
 using System.Collections;
-using FMODUnity;
 using Micasa.Bridge;
 using UnityEngine;
 
@@ -7,29 +6,38 @@ namespace Micasa
 {
     public class StageManager : MonoBehaviour
     {
-        [SerializeField] StageData stageData;
+        [SerializeField] private HostWindowCamera  hostCamera;
+        [SerializeField] private DVDBounce         dvd;
+        [SerializeField] private HostWindowManager hostManager;
 
-        private HostWindowCamera  hostCamera;
-        private DVDBounce         dvd;
-        private HostWindowManager hostManager;
-
-        void Start()
+        void Awake()
         {
-            hostCamera  = FindAnyObjectByType<HostWindowCamera>();
-            dvd         = FindAnyObjectByType<DVDBounce>();
-            hostManager = FindAnyObjectByType<HostWindowManager>();
+            if (hostCamera  == null) hostCamera  = FindAnyObjectByType<HostWindowCamera>();
+            if (dvd         == null) dvd         = FindAnyObjectByType<DVDBounce>();
+            if (hostManager == null) hostManager = FindAnyObjectByType<HostWindowManager>();
 
-            if (stageData != null)
-                StartCoroutine(RunSequence());
+            if (hostCamera  == null) Debug.LogWarning("[StageManager] HostWindowCamera no encontrado.");
+            if (hostManager == null) Debug.LogWarning("[StageManager] HostWindowManager no encontrado — StartPuzzle/StopPuzzle no funcionarán.");
         }
 
-        IEnumerator RunSequence()
+        public void StartSequence(StageData data)
         {
-            foreach (var step in stageData.steps)
+            StopAllCoroutines();
+            Debug.Log($"[StageManager] Starting '{data.name}' — {data.steps.Count} steps.");
+            StartCoroutine(RunSequence(data));
+        }
+
+        IEnumerator RunSequence(StageData data)
+        {
+            for (int i = 0; i < data.steps.Count; i++)
             {
+                var step = data.steps[i];
+                Debug.Log($"[StageManager] Step {i}: waiting {step.delay}s.");
                 yield return new WaitForSeconds(step.delay);
+                Debug.Log($"[StageManager] Step {i}: executing {step.actions.Count} actions.");
                 ExecuteStep(step);
             }
+            Debug.Log("[StageManager] Sequence complete.");
         }
 
         void ExecuteStep(StageStep step)
@@ -39,15 +47,21 @@ namespace Micasa
             SendWindowData(AppBootstrap.Gnome2Bridge,     step.gnome2);
 
             foreach (var action in step.actions)
+            {
+                Debug.Log($"[StageManager] Action: {action}");
                 ExecuteAction(action, step);
+            }
         }
 
         private static void SendWindowData(WindowBridge bridge, WindowStepData data)
         {
             if (bridge == null || !bridge.IsConnected) return;
 
-            if (!string.IsNullOrEmpty(data.text))
-                bridge.Send(new BridgeMessage { type = "show-text", payload = data.text });
+            if (data.lines.Count > 0)
+            {
+                var seq = new DialogueSequence { lines = data.lines };
+                bridge.Send(new BridgeMessage { type = "show-text-sequence", payload = JsonUtility.ToJson(seq) });
+            }
 
             foreach (var ev in data.fmodPlay)
                 if (!ev.IsNull)
@@ -72,6 +86,12 @@ namespace Micasa
                 case StageAction.PlaySquishAnimation:  hostCamera?.PlaySquishAnimation();      break;
                 case StageAction.ToggleDVDBounce:      dvd?.Toggle();                          break;
                 case StageAction.SetWindowsVolume:     WindowsVolume.Set(step.targetVolume);   break;
+                case StageAction.SelfDestruct:         AppBootstrap.SelfDestruct();            break;
+                case StageAction.StretchFull:          hostCamera?.PlayStretchFullAnimation();  break;
+                case StageAction.StretchWide:          hostCamera?.PlayStretchWideAnimation();  break;
+                case StageAction.StretchTall:          hostCamera?.PlayStretchTallAnimation();  break;
+                case StageAction.StretchLoop:          hostCamera?.StartStretchLoop();          break;
+                case StageAction.StopStretch:          hostCamera?.StopStretch();               break;
             }
         }
     }

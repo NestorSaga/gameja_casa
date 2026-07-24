@@ -10,6 +10,7 @@ namespace Micasa
     {
         public const float PPU = 100f;
 
+        [DllImport("user32.dll")] static extern bool SetForegroundWindow(IntPtr hWnd);
         [DllImport("user32.dll")] static extern bool GetClientRect(IntPtr hWnd, out WinRect rect);
         [DllImport("user32.dll")] static extern bool ClientToScreen(IntPtr hWnd, ref WinPoint pt);
         [DllImport("user32.dll")] static extern bool GetWindowRect(IntPtr hWnd, out WinRect rect);
@@ -41,6 +42,10 @@ namespace Micasa
         const uint SWP_NOZORDER     = 0x0004;
         const uint SWP_SHOWWINDOW   = 0x0040;
         const uint SWP_FRAMECHANGED = 0x0020;
+        const uint SWP_NOACTIVATE   = 0x0010;
+
+        static readonly IntPtr HWND_TOPMOST    = new IntPtr(-1);
+        static readonly IntPtr HWND_NOTOPMOST  = new IntPtr(-2);
 
         private Camera          camera;
         private IntPtr          hwnd;
@@ -63,8 +68,9 @@ namespace Micasa
         private Vector3 targetPosition;
         [SerializeField] private float smoothSpeed = 8f;
 
-        private bool animating;
-        private bool isTransparent;
+        private bool      animating;
+        private bool      isTransparent;
+        private Coroutine stretchLoop;
         private uint savedStyle;
 
         public bool ExplorerMode  => explorerMode;
@@ -102,6 +108,8 @@ namespace Micasa
 #if !UNITY_EDITOR
             StartCoroutine(isCameraMode ? PositionCameraWindow() : WaitForHandle());
 #endif
+            if (GetComponent<CameraPlayerSync>() == null)
+                gameObject.AddComponent<CameraPlayerSync>();
         }
 
         void Update()
@@ -166,10 +174,61 @@ namespace Micasa
             isTransparent = false;
         }
 
+        public void RefocusAfterDelay()
+        {
+            if (hwnd == IntPtr.Zero) return;
+            SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            StartCoroutine(RefocusCoroutine());
+        }
+
+        IEnumerator RefocusCoroutine()
+        {
+            yield return new WaitForSeconds(1f);
+            SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            SetForegroundWindow(hwnd);
+        }
+
         public void PlaySquishAnimation()
         {
             if (hwnd == IntPtr.Zero || animating) return;
             StartCoroutine(SquishCoroutine());
+        }
+
+        public void PlayStretchFullAnimation()
+        {
+            if (hwnd == IntPtr.Zero || animating) return;
+            StartCoroutine(StretchFullCoroutine());
+        }
+
+        public void PlayStretchWideAnimation()
+        {
+            if (hwnd == IntPtr.Zero || animating) return;
+            StartCoroutine(StretchWideCoroutine());
+        }
+
+        public void PlayStretchTallAnimation()
+        {
+            if (hwnd == IntPtr.Zero || animating) return;
+            StartCoroutine(StretchTallCoroutine());
+        }
+
+        public void StartStretchLoop()
+        {
+            if (hwnd == IntPtr.Zero || animating) return;
+            animating         = true;
+            stretchLoop       = StartCoroutine(StretchLoopCoroutine());
+        }
+
+        public void StopStretch()
+        {
+            if (animating)
+            {
+                StopAllCoroutines();
+                animating = false;
+            }
+            if (stretchLoop != null)
+                stretchLoop = null;
+            StartCoroutine(ReturnToOriginalSize());
         }
 
         IEnumerator SquishCoroutine()
@@ -187,6 +246,58 @@ namespace Micasa
             yield return AnimateWindowToSize(origW,     origH,     0.4f);  // original
 
             camera.ResetAspect(); // Devuelve el aspect natural de la ventana
+            animating = false;
+        }
+
+        IEnumerator StretchFullCoroutine()
+        {
+            animating = true;
+            camera.aspect = (float)originalWidth / originalHeight;
+
+            yield return AnimateWindowToSize(originalWidth,                originalHeight,               0.15f);
+            yield return AnimateWindowToSize((int)(originalWidth * 1.7f), (int)(originalHeight * 1.4f), 0.45f);
+
+            animating = false;
+        }
+
+        IEnumerator StretchWideCoroutine()
+        {
+            animating = true;
+            camera.aspect = (float)originalWidth / originalHeight;
+
+            yield return AnimateWindowToSize(originalWidth,                originalHeight,                     0.15f);
+            yield return AnimateWindowToSize((int)(originalWidth * 2.6f), (int)(originalHeight * 0.65f),      0.4f);
+
+            animating = false;
+        }
+
+        IEnumerator StretchTallCoroutine()
+        {
+            animating = true;
+            camera.aspect = (float)originalWidth / originalHeight;
+
+            yield return AnimateWindowToSize(originalWidth,                originalHeight,                     0.15f);
+            yield return AnimateWindowToSize((int)(originalWidth * 0.65f), (int)(originalHeight * 2.6f),      0.4f);
+
+            animating = false;
+        }
+
+        IEnumerator StretchLoopCoroutine()
+        {
+            camera.aspect = (float)originalWidth / originalHeight;
+            yield return AnimateWindowToSize(originalWidth, originalHeight, 0.15f);
+
+            while (true)
+            {
+                yield return AnimateWindowToSize((int)(originalWidth * 1.25f), (int)(originalHeight * 0.82f), 0.6f);
+                yield return AnimateWindowToSize((int)(originalWidth * 0.82f), (int)(originalHeight * 1.25f), 0.6f);
+            }
+        }
+
+        IEnumerator ReturnToOriginalSize()
+        {
+            yield return AnimateWindowToSize(originalWidth, originalHeight, 0.4f);
+            camera.ResetAspect();
             animating = false;
         }
 
