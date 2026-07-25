@@ -240,7 +240,7 @@ namespace Micasa
         public static void LaunchClientProcess()    => Launch("--client");
         public static void LaunchGnomeWindow()      { gnomeProcess      = Launch("--gnome");                                    }
         public static void LaunchGnomophoneWindow() { gnomophoneProcess = Launch(GnomophoneArgs());                             }
-        public static void LaunchGnome2Window()     { gnome2Process     = Launch(Gnome2Args());                                 }
+        public static void LaunchGnome2Window()     { gnome2Process     = Launch("--gnome2");                                   }
 
         private static string GnomophoneArgs()
         {
@@ -249,15 +249,6 @@ namespace Micasa
             int x = 0;
             int y = (Display.main.systemHeight - h) / 2;
             return $"--gnomeophone -screen-width {w} -screen-height {h} -screen-x {x} -screen-y {y}";
-        }
-
-        private static string Gnome2Args()
-        {
-            int w = instance != null ? instance.windowWidth  : 800;
-            int h = instance != null ? instance.windowHeight : 600;
-            int x = 0;
-            int y = Display.main.systemHeight - h;
-            return $"--gnome2 -screen-width {w} -screen-height {h} -screen-x {x} -screen-y {y}";
         }
 
         public static void CloseGnomeWindow()        => KillProcess(ref gnomeProcess);

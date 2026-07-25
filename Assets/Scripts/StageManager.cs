@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using FMODUnity;
 using Micasa.Bridge;
 using UnityEngine;
 
@@ -12,6 +14,7 @@ namespace Micasa
         [SerializeField] private GameObject        lockGameObject;
 
         private StageData _currentData;
+        private readonly Dictionary<string, FMOD.Studio.EventInstance> _hostPlaying = new();
 
         void Awake()
         {
@@ -47,6 +50,7 @@ namespace Micasa
 
         void ExecuteStep(StageStep step)
         {
+            ExecuteHostFmod(step.hostFmodPlay, step.hostFmodStop);
             SendWindowData(AppBootstrap.GnomeBridge,      step.gnome);
             SendWindowData(AppBootstrap.GnomophoneBridge, step.gnomeophone);
             SendWindowData(AppBootstrap.Gnome2Bridge,     step.gnome2);
@@ -116,8 +120,43 @@ namespace Micasa
                 case StageAction.TogglePhysics:        Physics2D.simulationMode = Physics2D.simulationMode == SimulationMode2D.FixedUpdate
                                                            ? SimulationMode2D.Script
                                                            : SimulationMode2D.FixedUpdate;                          break;
+                case StageAction.SpawnObject:          GameManager.Instance?.SpawnObject(step.spawnPosition);       break;
             }
         }
+        private void ExecuteHostFmod(List<EventReference> toPlay, List<EventReference> toStop)
+        {
+            foreach (var ev in toPlay)
+            {
+                if (ev.IsNull) continue;
+                string key = ((System.Guid)ev.Guid).ToString();
+                if (_hostPlaying.ContainsKey(key)) continue;
+                var inst = RuntimeManager.CreateInstance(ev);
+                inst.start();
+                _hostPlaying[key] = inst;
+            }
+
+            foreach (var ev in toStop)
+            {
+                if (ev.IsNull) continue;
+                string key = ((System.Guid)ev.Guid).ToString();
+                if (!_hostPlaying.TryGetValue(key, out var inst)) continue;
+                inst.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                inst.release();
+                _hostPlaying.Remove(key);
+            }
+        }
+
+        void OnDestroy()
+        {
+            foreach (var inst in _hostPlaying.Values)
+            {
+                inst.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+                inst.release();
+            }
+            _hostPlaying.Clear();
+        }
+
+
         private static void GenerateFile(StageStep step)
         {
             if (step.fileTemplate == null)

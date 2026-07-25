@@ -32,6 +32,7 @@ namespace Micasa
         GenerateFile,
         ToggleLoadingScreen,
         TogglePhysics,
+        SpawnObject,
     }
 
     [Serializable]
@@ -64,7 +65,13 @@ namespace Micasa
         public string            url;
         public TextAsset         fileTemplate;
         public string            outputFileName;
+        public Vector2           spawnPosition;
 
+        [Header("Host (Main Window)")]
+        public List<EventReference> hostFmodPlay = new();
+        public List<EventReference> hostFmodStop = new();
+
+        [Header("Client Windows")]
         public WindowStepData gnome       = new();
         public WindowStepData gnomeophone = new();
         public WindowStepData gnome2      = new();

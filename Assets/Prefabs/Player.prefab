@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Micasa.PlayerController2D
   moveSpeed: 2.5
-  jumpForce: 4
+  jumpForce: 4.5
   coyoteTime: 0.15
   groundCheck: {fileID: 3990427697923560244}
   groundCheckRadius: 0.1

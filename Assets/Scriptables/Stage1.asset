@@ -21,6 +21,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines: []
       fmodPlay: []
@@ -39,6 +41,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines:
       - text: "Trufas y amanitas! Qu\xE9 es tanto ruido!!"
@@ -75,6 +79,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines: []
       fmodPlay: []
@@ -93,6 +99,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines:
       - text: "Ya me joder\xEDa escuchar <b>Shroom n Bass</b>"
@@ -115,6 +123,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines:
       - text: "Al menos mis o\xEDdos pueden descansar"
@@ -143,6 +153,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines: []
       fmodPlay: []
@@ -167,6 +179,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines:
       - text: "Menudo juego mas aburrido, t\xFA"
@@ -195,6 +209,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines:
       - text: "Ahora esta m\xE1s..."

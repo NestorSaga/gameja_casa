@@ -26,9 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GnomophoneScene.unity
     guid: eb113ed64cdd81742a014baebee49de2
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Gnome2Scene.unity
-    guid: 00000000000000000000000000000000
+    guid: 2d634402c68c9f84d8f764277db9accf
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

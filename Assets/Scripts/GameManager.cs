@@ -10,6 +10,7 @@ namespace Micasa
         [SerializeField] List<Stage>   stages       = new();
         [SerializeField] StageManager  stageManager;
         [SerializeField] GameObject    loadingScreen;
+        [SerializeField] GameObject    spawnPrefab;
 
         private HostWindowCamera hostCamera;
 
@@ -22,6 +23,7 @@ namespace Micasa
         [SerializeField] private int  debugStartIndex = 0;
 
         public int  CurrentStageIndex    { get; private set; } = 0;
+        public int  CurrentStageId       => CurrentStage?.HasData == true ? CurrentStage.Data.id : -1;
         public int  CollectablesGathered { get; private set; } = 0;
 
         Stage CurrentStage => stages.Count > 0 && CurrentStageIndex < stages.Count
@@ -137,6 +139,33 @@ namespace Micasa
             }
         }
 
+        public void LoadNextStageNoLoadingScreen()
+        {
+            if (CurrentStage.HasData && CurrentStage.Data.id == 2)
+                hostCamera?.StopStretch();
+
+            DeactivateAllPlayers();
+            CurrentStage?.gameObject.SetActive(false);
+            CurrentStageIndex++;
+            CollectablesGathered = 0;
+
+            if (CurrentStageIndex >= stages.Count)
+            {
+                Debug.Log("[GameManager] No hay más stages.");
+                return;
+            }
+
+            var next = stages[CurrentStageIndex];
+            if (next.HasData)
+                stageManager?.StartSequence(next.Data);
+            else
+            {
+                next.gameObject.SetActive(true);
+                next.ActivatePlayer();
+                FindAnyObjectByType<CameraPlayerSync>()?.SendStageSync();
+            }
+        }
+
         public void LoadStageFromData(StageData data)
         {
             var stage = stages.Find(s => s.HasData && s.Data == data);
@@ -149,6 +178,12 @@ namespace Micasa
             stage.gameObject.SetActive(true);
             stage.ActivatePlayer();
             FindAnyObjectByType<CameraPlayerSync>()?.SendStageSync();
+        }
+
+        public void SpawnObject(Vector2 position)
+        {
+            if (spawnPrefab == null) { Debug.LogWarning("[GameManager] SpawnObject: spawnPrefab no asignado."); return; }
+            Instantiate(spawnPrefab, position, Quaternion.identity);
         }
 
         public void UnlockCurrentGoal() => CurrentStage?.UnlockGoal();

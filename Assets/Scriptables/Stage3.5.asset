@@ -148,6 +148,14 @@ MonoBehaviour:
     fileTemplate: {fileID: 0}
     outputFileName: 
     gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
       lines:
       - text: "Psst! Aqu\xED abajo!"
         delay: 4
@@ -179,14 +187,6 @@ MonoBehaviour:
         delay: 4
       - text: "S\xEDgueme, {PlayerPCName}!"
         delay: 4
-      fmodPlay: []
-      fmodStop: []
-    gnomeophone:
-      lines: []
-      fmodPlay: []
-      fmodStop: []
-    gnome2:
-      lines: []
       fmodPlay: []
       fmodStop: []
   - delay: 62
