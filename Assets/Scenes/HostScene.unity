@@ -545,7 +545,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &84203284
 Transform:
   m_ObjectHideFlags: 0
@@ -4349,7 +4349,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &871824248
 Transform:
   m_ObjectHideFlags: 0
@@ -4557,8 +4557,10 @@ MonoBehaviour:
   - {fileID: 271923575}
   - {fileID: 1145261813}
   - {fileID: 1226893674}
+  - {fileID: 871824249}
   stageManager: {fileID: 1099997192}
   loadingScreen: {fileID: 124988759}
+  spawnPrefab: {fileID: 0}
   stage2Text_collectible2: "Y as\xED? Menuda fuerza tengo, t\xFA"
   stage2Text_collectible3: Mira lo que hago entonces! <b>Boing boing!!</b>
   debugMode: 1
@@ -5857,7 +5859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1226893673
 Transform:
   m_ObjectHideFlags: 0
@@ -7264,7 +7266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7079264203364462681, guid: 21847f228483a704390db7878bdcc392, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.53
+      value: -7.18
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
