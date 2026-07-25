@@ -18,8 +18,18 @@ namespace Micasa
         float       coyoteTimer;
         bool        isGrounded;
         bool        jumpQueued;
+        bool        godMode;
 
         void Awake() => rb = GetComponent<Rigidbody2D>();
+
+        void OnEnable()  { if (Keyboard.current != null) Keyboard.current.onTextInput += OnTextInput; }
+        void OnDisable() { if (Keyboard.current != null) Keyboard.current.onTextInput -= OnTextInput; }
+
+        void OnTextInput(char c)
+        {
+            if (c == 'ç' || c == 'Ç') godMode = !godMode;
+            if (c == '+')             GameManager.Instance?.UnlockCurrentGoal();
+        }
 
         void Update()
         {
@@ -28,7 +38,7 @@ namespace Micasa
             var kb = Keyboard.current;
             moveInput = (kb.dKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed ? 1f : 0f);
 
-            if (kb.spaceKey.wasPressedThisFrame && coyoteTimer > 0f)
+            if (kb.spaceKey.wasPressedThisFrame && (godMode || coyoteTimer > 0f))
             {
                 jumpQueued  = true;
                 coyoteTimer = 0f;

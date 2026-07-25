@@ -9,6 +9,9 @@ namespace Micasa
         [SerializeField] private HostWindowCamera  hostCamera;
         [SerializeField] private DVDBounce         dvd;
         [SerializeField] private HostWindowManager hostManager;
+        [SerializeField] private GameObject        lockGameObject;
+
+        private StageData _currentData;
 
         void Awake()
         {
@@ -29,6 +32,7 @@ namespace Micasa
 
         IEnumerator RunSequence(StageData data)
         {
+            _currentData = data;
             for (int i = 0; i < data.steps.Count; i++)
             {
                 var step = data.steps[i];
@@ -37,6 +41,7 @@ namespace Micasa
                 Debug.Log($"[StageManager] Step {i}: executing {step.actions.Count} actions.");
                 ExecuteStep(step);
             }
+            _currentData = null;
             Debug.Log("[StageManager] Sequence complete.");
         }
 
@@ -51,6 +56,14 @@ namespace Micasa
                 Debug.Log($"[StageManager] Action: {action}");
                 ExecuteAction(action, step);
             }
+        }
+
+        public void SendGnomeText(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return;
+            var stepData = new WindowStepData();
+            stepData.lines.Add(new DialogueLine { text = text });
+            SendWindowData(AppBootstrap.GnomeBridge, stepData);
         }
 
         private static void SendWindowData(WindowBridge bridge, WindowStepData data)
@@ -76,9 +89,12 @@ namespace Micasa
         {
             switch (action)
             {
-                case StageAction.OpenGnomeWindow:      AppBootstrap.LaunchGnomeWindow();       break;
-                case StageAction.OpenGnomophoneWindow: AppBootstrap.LaunchGnomophoneWindow();  break;
-                case StageAction.OpenGnome2Window:     AppBootstrap.LaunchGnome2Window();      break;
+                case StageAction.OpenGnomeWindow:       AppBootstrap.LaunchGnomeWindow();       break;
+                case StageAction.OpenGnomophoneWindow:  AppBootstrap.LaunchGnomophoneWindow();  break;
+                case StageAction.OpenGnome2Window:      AppBootstrap.LaunchGnome2Window();      break;
+                case StageAction.CloseGnomeWindow:      AppBootstrap.CloseGnomeWindow();        break;
+                case StageAction.CloseGnomophoneWindow: AppBootstrap.CloseGnomophoneWindow();   break;
+                case StageAction.CloseGnome2Window:     AppBootstrap.CloseGnome2Window();       break;
                 case StageAction.StartPuzzle:          hostManager?.StartPuzzle();             break;
                 case StageAction.StopPuzzle:           hostManager?.StopPuzzle();              break;
                 case StageAction.ToggleTransparency:   hostCamera?.ToggleTransparency();       break;
@@ -90,9 +106,35 @@ namespace Micasa
                 case StageAction.StretchFull:          hostCamera?.PlayStretchFullAnimation();  break;
                 case StageAction.StretchWide:          hostCamera?.PlayStretchWideAnimation();  break;
                 case StageAction.StretchTall:          hostCamera?.PlayStretchTallAnimation();  break;
-                case StageAction.StretchLoop:          hostCamera?.StartStretchLoop();          break;
-                case StageAction.StopStretch:          hostCamera?.StopStretch();               break;
+                case StageAction.StretchLoop:          hostCamera?.StartStretchLoop();                              break;
+                case StageAction.StopStretch:          hostCamera?.StopStretch();                                   break;
+                case StageAction.HideLoadingScreen:    GameManager.Instance?.LoadStageFromData(_currentData);       break;
+                case StageAction.LockGame:             lockGameObject?.SetActive(true);                             break;
+                case StageAction.OpenURL:              if (!string.IsNullOrEmpty(step.url)) Application.OpenURL(step.url); break;
+                case StageAction.GenerateFile:         GenerateFile(step);                                          break;
+                case StageAction.ToggleLoadingScreen:  GameManager.Instance?.ToggleLoadingScreen();                 break;
+                case StageAction.TogglePhysics:        Physics2D.simulationMode = Physics2D.simulationMode == SimulationMode2D.FixedUpdate
+                                                           ? SimulationMode2D.Script
+                                                           : SimulationMode2D.FixedUpdate;                          break;
             }
+        }
+        private static void GenerateFile(StageStep step)
+        {
+            if (step.fileTemplate == null)
+            {
+                Debug.LogWarning("[StageManager] GenerateFile: no hay fileTemplate asignado.");
+                return;
+            }
+
+            string fileName = string.IsNullOrEmpty(step.outputFileName)
+                ? step.fileTemplate.name + ".txt"
+                : step.outputFileName;
+
+            string gameDir = System.IO.Path.GetDirectoryName(Application.dataPath);
+            string path    = System.IO.Path.Combine(gameDir, fileName);
+
+            System.IO.File.WriteAllText(path, step.fileTemplate.text, System.Text.Encoding.UTF8);
+            Debug.Log($"[StageManager] GenerateFile: archivo escrito en '{path}'.");
         }
     }
 }

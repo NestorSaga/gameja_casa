@@ -12,19 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c2c08aefce295045b3b485c120c7a46, type: 3}
   m_Name: Stage3
   m_EditorClassIdentifier: Assembly-CSharp::Micasa.StageData
-  id: 2
+  id: 3
   collectiblesRequired: 3
   steps:
   - delay: 1
-    actions: 
+    actions: 12000000
     targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
     gnome:
       lines:
-      - text: Te crees bueno o algo?
+      - text: Eres un... <b>falo hediondo!!</b>
         delay: 4
-      - text: Vas a seguir molestando?
+      - text: Tu espera que cargue el siguiente nivel
         delay: 4
-      - text: "Vale. Vale. T\xFA te lo has buscado."
+      - text: A ver si sigues riendo
+        delay: 4
+      - text: Te voy a hacer fallar de forma miserable
+        delay: 4
+      - text: "Aqu\xED voy!"
         delay: 4
       fmodPlay: []
       fmodStop: []
@@ -36,27 +43,78 @@ MonoBehaviour:
       lines: []
       fmodPlay: []
       fmodStop: []
-  - delay: 13
-    actions: 0b000000
+  - delay: 22
+    actions: 
     targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
     gnome:
       lines:
-      - text: Muajajaja
+      - text: "Esta basura carga o qu\xE9??!!"
         delay: 4
-      - text: "Esta casa es m\xEDa y hago lo que quiera"
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 4
+    actions: 13000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    gnome:
+      lines:
+      - text: Al fin! Vamos a ver si mantienes esa sonrisa...
         delay: 4
-      - text: "Y ahora ver\xE9 como fallas una y otra vez"
+      - text: ...si te <b>rompo</b> el juego!!
         delay: 4
-      - text: "Y ahora ver\xE9 como fallas una y otra vez"
-        delay: 4
-      - text: y fallas a tu familia
-        delay: 4
-      - text: y a tus amigos
-        delay: 4
-      - text: y a tu Floober
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 12
+    actions: 06000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 4
+    actions: 
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    gnome:
+      lines:
+      - text: Jejeje... Voy a disfrutar viendo esto
         delay: 4
       - text: 
-        delay: 0
+        delay: 4
       fmodPlay: []
       fmodStop: []
     gnomeophone:

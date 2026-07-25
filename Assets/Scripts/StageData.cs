@@ -10,6 +10,9 @@ namespace Micasa
         OpenGnomeWindow,
         OpenGnomophoneWindow,
         OpenGnome2Window,
+        CloseGnomeWindow,
+        CloseGnomophoneWindow,
+        CloseGnome2Window,
         StartPuzzle,
         StopPuzzle,
         ToggleTransparency,
@@ -23,6 +26,12 @@ namespace Micasa
         StretchTall,
         StretchLoop,
         StopStretch,
+        HideLoadingScreen,
+        LockGame,
+        OpenURL,
+        GenerateFile,
+        ToggleLoadingScreen,
+        TogglePhysics,
     }
 
     [Serializable]
@@ -52,6 +61,9 @@ namespace Micasa
         public float             delay;
         public List<StageAction> actions = new();
         [Range(0f, 1f)] public float targetVolume = 1f;
+        public string            url;
+        public TextAsset         fileTemplate;
+        public string            outputFileName;
 
         public WindowStepData gnome       = new();
         public WindowStepData gnomeophone = new();

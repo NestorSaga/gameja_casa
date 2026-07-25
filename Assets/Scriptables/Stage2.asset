@@ -12,14 +12,109 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c2c08aefce295045b3b485c120c7a46, type: 3}
   m_Name: Stage2
   m_EditorClassIdentifier: Assembly-CSharp::Micasa.StageData
-  id: 1
+  id: 2
   collectiblesRequired: 3
   steps:
   - delay: 2
-    actions: 08000000
+    actions: 0b000000
     targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    gnome:
+      lines:
+      - text: Te crees bueno o algo?
+        delay: 4
+      - text: Vas a seguir molestando?
+        delay: 4
+      - text: "Te he estado observando desde a\xF1os"
+        delay: 4
+      - text: "Siempre a\xF1adiendo m\xE1s basura a <b>mi</b> escritorio"
+        delay: 4
+      - text: Y buscando <b>"Patas sucias encima de la cara"</b> en internet
+        delay: 4
+      - text: "Adem\xE1s eres mal\xEDsimo en todos los juegos"
+        delay: 4
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 25
+    actions: 13000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
     gnome:
       lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 2
+    actions: 
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    gnome:
+      lines:
+      - text: Vas a seguir jugando?
+        delay: 4
+      - text: Pues toma caracola!
+        delay: 4
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 10
+    actions: 0f000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 3
+    actions: 
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    gnome:
+      lines:
+      - text: No ves bien? Pues te chinchas!
+        delay: 4
+      - text: 
+        delay: 0
       fmodPlay: []
       fmodStop: []
     gnomeophone:

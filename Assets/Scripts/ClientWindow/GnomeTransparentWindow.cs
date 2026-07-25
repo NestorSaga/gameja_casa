@@ -7,8 +7,6 @@ namespace Micasa
 {
     public class GnomeTransparentWindow : MonoBehaviour
     {
-        [DllImport("user32.dll")] static extern uint GetWindowLong(IntPtr hWnd, int nIndex);
-        [DllImport("user32.dll")] static extern uint SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
         [DllImport("user32.dll")] static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
         [DllImport("dwmapi.dll")] static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref DwmMargins pMarInset);
         [DllImport("user32.dll", EntryPoint = "SystemParametersInfoW")]
@@ -17,11 +15,6 @@ namespace Micasa
         [StructLayout(LayoutKind.Sequential)] struct DwmMargins { public int cxLeftWidth, cxRightWidth, cyTopHeight, cyBottomHeight; }
         [StructLayout(LayoutKind.Sequential)] struct WinRect    { public int left, top, right, bottom; }
 
-        const int  GWL_STYLE        = -16;
-        const int  GWL_EXSTYLE      = -20;
-        const uint WS_CAPTION       = 0x00C00000;
-        const uint WS_THICKFRAME    = 0x00040000;
-        const uint WS_EX_TOOLWINDOW = 0x00000080;
         const uint SWP_NOSIZE       = 0x0001;
         const uint SWP_FRAMECHANGED = 0x0020;
         const uint SPI_GETWORKAREA  = 0x0030;
@@ -53,18 +46,25 @@ namespace Micasa
             SetWindowPos(hwnd, HWND_BOTTOM, -Screen.width * 2, -Screen.height * 2, 0, 0, SWP_NOSIZE);
             yield return null;
 
-            var style = GetWindowLong(hwnd, GWL_STYLE);
-            SetWindowLong(hwnd, GWL_STYLE, style & ~WS_CAPTION & ~WS_THICKFRAME);
-            var exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
-            SetWindowLong(hwnd, GWL_EXSTYLE, exStyle | WS_EX_TOOLWINDOW);
-
             var m = new DwmMargins { cxLeftWidth = -1, cxRightWidth = -1, cyTopHeight = -1, cyBottomHeight = -1 };
             DwmExtendFrameIntoClientArea(hwnd, ref m);
 
             var workArea = new WinRect();
             SystemParametersInfoRect(SPI_GETWORKAREA, 0, ref workArea, 0);
-            int x = workArea.right  - Screen.width;
-            int y = workArea.bottom - Screen.height;
+
+            var args = System.Environment.GetCommandLineArgs();
+            int x, y;
+            if (System.Array.IndexOf(args, "--gnome2") >= 0)
+            {
+                x = workArea.left;
+                y = workArea.bottom - Screen.height;
+            }
+            else
+            {
+                x = workArea.right  - Screen.width;
+                y = workArea.bottom - Screen.height;
+            }
+
             SetWindowPos(hwnd, HWND_TOPMOST, x, y, Screen.width, Screen.height, SWP_FRAMECHANGED);
         }
     }

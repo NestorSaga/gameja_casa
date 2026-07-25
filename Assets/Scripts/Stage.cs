@@ -16,6 +16,7 @@ namespace Micasa
         public bool      HasData             => data != null;
         public Vector3   SpawnPosition       => spawnPoint != null ? spawnPoint.position : Vector3.zero;
         public int       CollectiblesRequired => data != null ? data.collectiblesRequired : 0;
+        public bool      IsGoalUnlocked      => goal != null && goal.enabled;
 
         void Start()
         {

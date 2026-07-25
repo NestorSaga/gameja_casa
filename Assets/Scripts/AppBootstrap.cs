@@ -31,13 +31,19 @@ namespace Micasa
         public static WindowBridge[] CameraBridges      { get; private set; }
         public static WindowBridge   CameraClientBridge { get; private set; }
 
+        private static AppBootstrap instance;
+
         private static readonly List<Process> childProcesses  = new();
         private static readonly List<Process> cameraProcesses = new();
+        private static Process gnomeProcess;
+        private static Process gnomophoneProcess;
+        private static Process gnome2Process;
 
         void OnApplicationFocus(bool _) => Application.runInBackground = true;
 
         void Awake()
         {
+            instance = this;
             Application.runInBackground = true;
             Application.wantsToQuit    += OnWantsToQuit;
 
@@ -231,10 +237,40 @@ namespace Micasa
                 CameraBridges[i] = CreateBridge(asHost: true, $"micasa-cam{i}-h2c", $"micasa-cam{i}-c2h");
         }
 
-        public static void LaunchClientProcess()      => Launch("--client");
-        public static void LaunchGnomeWindow()        => Launch("--gnome");
-        public static void LaunchGnomophoneWindow()   => Launch("--gnomeophone");
-        public static void LaunchGnome2Window()       => Launch("--gnome2");
+        public static void LaunchClientProcess()    => Launch("--client");
+        public static void LaunchGnomeWindow()      { gnomeProcess      = Launch("--gnome");                                    }
+        public static void LaunchGnomophoneWindow() { gnomophoneProcess = Launch(GnomophoneArgs());                             }
+        public static void LaunchGnome2Window()     { gnome2Process     = Launch(Gnome2Args());                                 }
+
+        private static string GnomophoneArgs()
+        {
+            int w = instance != null ? instance.windowWidth  : 800;
+            int h = instance != null ? instance.windowHeight : 600;
+            int x = 0;
+            int y = (Display.main.systemHeight - h) / 2;
+            return $"--gnomeophone -screen-width {w} -screen-height {h} -screen-x {x} -screen-y {y}";
+        }
+
+        private static string Gnome2Args()
+        {
+            int w = instance != null ? instance.windowWidth  : 800;
+            int h = instance != null ? instance.windowHeight : 600;
+            int x = 0;
+            int y = Display.main.systemHeight - h;
+            return $"--gnome2 -screen-width {w} -screen-height {h} -screen-x {x} -screen-y {y}";
+        }
+
+        public static void CloseGnomeWindow()        => KillProcess(ref gnomeProcess);
+        public static void CloseGnomophoneWindow()   => KillProcess(ref gnomophoneProcess);
+        public static void CloseGnome2Window()       => KillProcess(ref gnome2Process);
+
+        private static void KillProcess(ref Process p)
+        {
+            if (p == null) return;
+            try { if (!p.HasExited) p.Kill(); } catch { }
+            childProcesses.Remove(p);
+            p = null;
+        }
 
         private static void ParseCameraArgs(string[] args, out int view, out int pos)
         {
@@ -261,7 +297,8 @@ namespace Micasa
             {
                 FileName        = exe,
                 Arguments       = arguments,
-                UseShellExecute = true
+                UseShellExecute = true,
+                WindowStyle     = ProcessWindowStyle.Normal
             });
             if (p != null)
             {

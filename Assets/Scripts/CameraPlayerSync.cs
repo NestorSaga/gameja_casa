@@ -7,13 +7,16 @@ namespace Micasa
     {
         const float WorldSyncRate = 1f / 30f;
 
-        [System.Serializable] private class PlayerPos      { public float x, y; }
-        [System.Serializable] private class PlatformState  { public float[] x, y; }
+        [System.Serializable] private class PlayerPos        { public float x, y; }
+        [System.Serializable] private class PlatformState   { public float[] x, y; }
         [System.Serializable] private class CollectibleState { public int[] active; }
+        [System.Serializable] private class GoalState       { public int[] unlocked; }
+        [System.Serializable] private class StageSync       { public int index; }
 
         // ── Host ────────────────────────────────────────────────────────────
         private Transform[]   hostPlatforms;
         private Collectible[] hostCollectibles;
+        private Stage[]       hostStages;
         private float         worldSyncTimer;
         private GameObject    cachedPlayer;
 
@@ -21,6 +24,7 @@ namespace Micasa
         private GameObject    ghostPlayer;
         private Transform[]   ghostPlatforms;
         private Collectible[] ghostCollectibles;
+        private Stage[]       ghostStages;
 
         void Start()
         {
@@ -36,6 +40,22 @@ namespace Micasa
         {
             hostPlatforms    = GatherPlatformTransforms();
             hostCollectibles = GatherCollectibles();
+            hostStages       = GatherStages();
+
+            if (AppBootstrap.CameraBridges != null)
+                foreach (var bridge in AppBootstrap.CameraBridges)
+                    if (bridge != null)
+                        bridge.OnConnected.AddListener(SendStageSync);
+        }
+
+        public void SendStageSync()
+        {
+            if (AppBootstrap.CameraBridges == null) return;
+            int idx = GameManager.Instance != null ? GameManager.Instance.CurrentStageIndex : 0;
+            SendToAll(new BridgeMessage {
+                type    = "stage-sync",
+                payload = JsonUtility.ToJson(new StageSync { index = idx })
+            });
         }
 
         void Update()
@@ -59,6 +79,7 @@ namespace Micasa
 
             SendPlatformState();
             SendCollectibleState();
+            SendGoalState();
         }
 
         private void SendPlatformState()
@@ -89,6 +110,17 @@ namespace Micasa
             SendToAll(new BridgeMessage { type = "collectible-state", payload = JsonUtility.ToJson(cs) });
         }
 
+        private void SendGoalState()
+        {
+            if (hostStages == null || hostStages.Length == 0) return;
+
+            var gs = new GoalState { unlocked = new int[hostStages.Length] };
+            for (int i = 0; i < hostStages.Length; i++)
+                if (hostStages[i] != null)
+                    gs.unlocked[i] = hostStages[i].IsGoalUnlocked ? 1 : 0;
+            SendToAll(new BridgeMessage { type = "goal-state", payload = JsonUtility.ToJson(gs) });
+        }
+
         private bool AnyBridgeConnected()
         {
             foreach (var b in AppBootstrap.CameraBridges)
@@ -114,6 +146,8 @@ namespace Micasa
                 if (ctrl != null) ctrl.enabled = false;
                 var rb = ghostPlayer.GetComponent<Rigidbody2D>();
                 if (rb != null) rb.bodyType = RigidbodyType2D.Kinematic;
+                foreach (var r in ghostPlayer.GetComponentsInChildren<Renderer>())
+                    r.enabled = false;
             }
 
             foreach (var p in Object.FindObjectsByType<MovingPlatform>  (FindObjectsInactive.Include, FindObjectsSortMode.None))
@@ -123,6 +157,7 @@ namespace Micasa
 
             ghostPlatforms    = GatherPlatformTransforms();
             ghostCollectibles = GatherCollectibles();
+            ghostStages       = GatherStages();
 
             var bridge = AppBootstrap.CameraClientBridge;
             if (bridge != null)
@@ -139,7 +174,11 @@ namespace Micasa
                     if (ghostPlayer == null)
                         ghostPlayer = GameObject.FindGameObjectWithTag("Player");
                     if (ghostPlayer != null)
+                    {
                         ghostPlayer.transform.position = new Vector3(p.x, p.y, ghostPlayer.transform.position.z);
+                        foreach (var r in ghostPlayer.GetComponentsInChildren<Renderer>())
+                            r.enabled = true;
+                    }
                     break;
                 }
                 case "platform-state":
@@ -160,6 +199,54 @@ namespace Micasa
                     for (int i = 0; i < len; i++)
                         if (ghostCollectibles[i] != null)
                             ghostCollectibles[i].gameObject.SetActive(cs.active[i] == 1);
+                    break;
+                }
+                case "goal-state":
+                {
+                    if (ghostStages == null) break;
+                    var gs  = JsonUtility.FromJson<GoalState>(msg.payload);
+                    int len = Mathf.Min(gs.unlocked?.Length ?? 0, ghostStages.Length);
+                    for (int i = 0; i < len; i++)
+                        if (ghostStages[i] != null)
+                        {
+                            if (gs.unlocked[i] == 1) ghostStages[i].UnlockGoal();
+                            else                     ghostStages[i].LockGoal();
+                        }
+                    break;
+                }
+                case "stage-sync":
+                {
+                    var ss = JsonUtility.FromJson<StageSync>(msg.payload);
+                    GameManager.Instance?.ForceActiveStage(ss.index);
+
+                    // Disable platform scripts on newly active stage's platforms
+                    foreach (var p in Object.FindObjectsByType<MovingPlatform>  (FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+                        p.enabled = false;
+                    foreach (var p in Object.FindObjectsByType<OrbitingPlatform>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+                        p.enabled = false;
+
+                    // Activate the new stage's player so it exists in the scene
+                    var allStages = Object.FindObjectsByType<Stage>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                    foreach (var stage in allStages)
+                        if (stage.gameObject.activeInHierarchy) { stage.ActivatePlayer(); break; }
+
+                    // Re-acquire ghostPlayer — old reference may point to a now-inactive object
+                    ghostPlayer = null;
+                    var newPlayer = GameObject.FindGameObjectWithTag("Player");
+                    if (newPlayer != null)
+                    {
+                        ghostPlayer = newPlayer;
+                        var ctrl = newPlayer.GetComponent<PlayerController2D>();
+                        if (ctrl != null) ctrl.enabled = false;
+                        var rb = newPlayer.GetComponent<Rigidbody2D>();
+                        if (rb != null) rb.bodyType = RigidbodyType2D.Kinematic;
+                        foreach (var r in newPlayer.GetComponentsInChildren<Renderer>())
+                            r.enabled = false;
+                    }
+
+                    ghostPlatforms    = GatherPlatformTransforms();
+                    ghostCollectibles = GatherCollectibles();
+                    ghostStages       = GatherStages();
                     break;
                 }
             }
@@ -191,6 +278,13 @@ namespace Micasa
         private static Collectible[] GatherCollectibles()
         {
             var arr = Object.FindObjectsByType<Collectible>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            System.Array.Sort(arr, (a, b) => GetPath(a.transform).CompareTo(GetPath(b.transform)));
+            return arr;
+        }
+
+        private static Stage[] GatherStages()
+        {
+            var arr = Object.FindObjectsByType<Stage>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             System.Array.Sort(arr, (a, b) => GetPath(a.transform).CompareTo(GetPath(b.transform)));
             return arr;
         }

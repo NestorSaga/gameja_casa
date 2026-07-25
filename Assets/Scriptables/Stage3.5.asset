@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c2c08aefce295045b3b485c120c7a46, type: 3}
-  m_Name: Stage1
+  m_Name: Stage3.5
   m_EditorClassIdentifier: Assembly-CSharp::Micasa.StageData
-  id: 1
+  id: 4
   collectiblesRequired: 3
   steps:
-  - delay: 1.5
-    actions: 00000000
-    targetVolume: 1
+  - delay: 2
+    actions: 07000000
+    targetVolume: 0
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
@@ -33,45 +33,99 @@ MonoBehaviour:
       lines: []
       fmodPlay: []
       fmodStop: []
-  - delay: 1.5
+  - delay: 5
     actions: 
-    targetVolume: 1
+    targetVolume: 0
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
     gnome:
       lines:
-      - text: "Trufas y amanitas! Qu\xE9 es tanto ruido!!"
+      - text: Maldito <b>pedo de lobo!</b>
         delay: 4
-      - text: Pero si es {PlayerPCName}! Otra vez...
-        delay: 4
-      - text: "O sea que no solo entras cada d\xEDa a <b>MI</b> casa..."
-        delay: 4
-      - text: ...es que la usas para jugar pura basura!
-        delay: 4
-      - text: Mira, me tienes hasta los hongos!
-        delay: 4
-      - text: "Espera que primero saco mi set\xF3fono"
+      - text: "Ya est\xE1! Me he cansado de t\xED!"
         delay: 4
       fmodPlay: []
       fmodStop: []
     gnomeophone:
       lines: []
-      fmodPlay:
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 9
+    actions: 18000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 1
+    actions: 16000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 4900000, guid: e65712625f8382949b22036227cac269, type: 3}
+    outputFileName: troyanomo.txt
+    gnome:
+      lines:
+      - text: Juego cerrado.
+        delay: 4
+      - text: "Te puedes ir a freir champi\xF1ones"
+        delay: 4
+      - text: A ver si te vas del aburrimiento
+        delay: 4
+      - text: "Y me llevo el set\xF3fono, m\xE1s faltar\xEDa!"
+        delay: 4
+      fmodPlay: []
+      fmodStop:
       - Guid:
           Data1: -1757616981
           Data2: 1133767070
           Data3: -1032140155
           Data4: -809267173
         Path: event:/Master/goof 2
+    gnomeophone:
+      lines: []
+      fmodPlay: []
       fmodStop: []
     gnome2:
       lines: []
       fmodPlay: []
       fmodStop: []
-  - delay: 28
-    actions: 01000000
-    targetVolume: 1
+  - delay: 18
+    actions: 0300000004000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 7
+    actions: 02000000
+    targetVolume: 0
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
@@ -89,15 +143,41 @@ MonoBehaviour:
       fmodStop: []
   - delay: 2
     actions: 
-    targetVolume: 1
+    targetVolume: 0
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
     gnome:
       lines:
-      - text: "Ya me joder\xEDa escuchar <b>Shroom n Bass</b>"
+      - text: "Psst! Aqu\xED abajo!"
         delay: 4
-      - text: "Ah\xED va un poco de <b>Leprechrust</b>"
+      - text: Se ha ido el duende, no?
+        delay: 4
+      - text: Soy Setoide
+        delay: 4
+      - text: Y soy el desarrollador de <b>Go, go, Hongo!</b>
+        delay: 4
+      - text: "No, yo no vivo aqu\xED"
+        delay: 4
+      - text: Me has pillado quitando bichos del juego
+        delay: 4
+      - text: cuando justo te lo has descargado!
+        delay: 4
+      - text: "Pero no pasa nada, as\xED te he visto jugar!"
+        delay: 4
+      - text: Te gusta? Es mi primer juego!
+        delay: 4
+      - text: Perdona, que me voy por las esporas
+        delay: 4
+      - text: "Yo conozco a ese duende. S\xE9 donde vive."
+        delay: 4
+      - text: "O sea, donde viv\xEDa antes de mudarse aqu\xED."
+        delay: 4
+      - text: "Encuentra el c\xF3digo para deshacer este virus"
+        delay: 4
+      - text: He visto como lo metia en la carpeta del juego
+        delay: 4
+      - text: "S\xEDgueme, {PlayerPCName}!"
         delay: 4
       fmodPlay: []
       fmodStop: []
@@ -109,38 +189,10 @@ MonoBehaviour:
       lines: []
       fmodPlay: []
       fmodStop: []
-  - delay: 10
-    actions: 
-    targetVolume: 1
-    url: 
-    fileTemplate: {fileID: 0}
-    outputFileName: 
-    gnome:
-      lines:
-      - text: "Al menos mis o\xEDdos pueden descansar"
-        delay: 4
-      - text: <b>De nada</b>
-        delay: 4
-      fmodPlay: []
-      fmodStop: []
-    gnomeophone:
-      lines: []
-      fmodPlay:
-      - Guid:
-          Data1: -1757616981
-          Data2: 1133767070
-          Data3: -1032140155
-          Data4: -809267173
-        Path: event:/Master/goof 2
-      fmodStop: []
-    gnome2:
-      lines: []
-      fmodPlay: []
-      fmodStop: []
-  - delay: 8
-    actions: 13000000
-    targetVolume: 1
-    url: 
+  - delay: 62
+    actions: 1500000005000000
+    targetVolume: 0
+    url: www.google.com
     fileTemplate: {fileID: 0}
     outputFileName: 
     gnome:
@@ -149,73 +201,7 @@ MonoBehaviour:
       fmodStop: []
     gnomeophone:
       lines: []
-      fmodPlay:
-      - Guid:
-          Data1: -1757616981
-          Data2: 1133767070
-          Data3: -1032140155
-          Data4: -809267173
-        Path: event:/Master/goof 2
-      fmodStop: []
-    gnome2:
-      lines: []
       fmodPlay: []
-      fmodStop: []
-  - delay: 3
-    actions: 
-    targetVolume: 1
-    url: 
-    fileTemplate: {fileID: 0}
-    outputFileName: 
-    gnome:
-      lines:
-      - text: "Menudo juego mas aburrido, t\xFA"
-        delay: 4
-      - text: "Que tal si hago \xE9sto..."
-        delay: 4
-      fmodPlay: []
-      fmodStop: []
-    gnomeophone:
-      lines: []
-      fmodPlay:
-      - Guid:
-          Data1: -1757616981
-          Data2: 1133767070
-          Data3: -1032140155
-          Data4: -809267173
-        Path: event:/Master/goof 2
-      fmodStop: []
-    gnome2:
-      lines: []
-      fmodPlay: []
-      fmodStop: []
-  - delay: 9
-    actions: 0b000000
-    targetVolume: 1
-    url: 
-    fileTemplate: {fileID: 0}
-    outputFileName: 
-    gnome:
-      lines:
-      - text: "Ahora esta m\xE1s..."
-        delay: 4
-      - text: <b>movidito!!</b>
-        delay: 4
-      - text: Muajajajajaja
-        delay: 4
-      - text: 
-        delay: 0
-      fmodPlay: []
-      fmodStop: []
-    gnomeophone:
-      lines: []
-      fmodPlay:
-      - Guid:
-          Data1: -1757616981
-          Data2: 1133767070
-          Data3: -1032140155
-          Data4: -809267173
-        Path: event:/Master/goof 2
       fmodStop: []
     gnome2:
       lines: []

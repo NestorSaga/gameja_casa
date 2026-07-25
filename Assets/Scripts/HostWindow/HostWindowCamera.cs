@@ -418,7 +418,7 @@ namespace Micasa
             int   sh           = Display.main.systemHeight;
             float halfLevelW   = sw * 0.5f / PPU;
             float halfLevelH   = sh * 0.5f / PPU;
-            float windowAspect = (float)Screen.width / Screen.height;
+            float windowAspect = camera.aspect;
 
             targetPosition  = new Vector3(halfLevelW, halfLevelH, -10f);
             targetOrthoSize = Mathf.Max(halfLevelH, halfLevelW / windowAspect);
