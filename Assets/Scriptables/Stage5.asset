@@ -14,4 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Micasa.StageData
   id: 6
   collectiblesRequired: 3
-  steps: []
+  steps:
+  - delay: 0
+    actions: 
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    spawnPosition: {x: 0, y: 0}
+    hostFmodPlay: []
+    hostFmodStop: []
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
