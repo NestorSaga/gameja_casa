@@ -5,7 +5,7 @@ namespace Micasa
     [RequireComponent(typeof(Collider2D))]
     public class StageAdvanceTrigger : MonoBehaviour
     {
-        [SerializeField] private int    triggerOnStageId = 5;
+        [SerializeField] private int    triggerOnStageId = 6;
         [SerializeField] private string playerTag        = "Player";
 
         void OnTriggerEnter2D(Collider2D other)
