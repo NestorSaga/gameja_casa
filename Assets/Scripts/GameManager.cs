@@ -11,6 +11,8 @@ namespace Micasa
         [SerializeField] StageManager  stageManager;
         [SerializeField] GameObject    loadingScreen;
         [SerializeField] GameObject    spawnPrefab;
+        [SerializeField] Transform     spawnPoint;
+        [SerializeField] GameObject    gnomePrefab;
 
         private HostWindowCamera hostCamera;
 
@@ -180,10 +182,36 @@ namespace Micasa
             FindAnyObjectByType<CameraPlayerSync>()?.SendStageSync();
         }
 
-        public void SpawnObject(Vector2 position)
+        public void SpawnObject()
         {
             if (spawnPrefab == null) { Debug.LogWarning("[GameManager] SpawnObject: spawnPrefab no asignado."); return; }
-            Instantiate(spawnPrefab, position, Quaternion.identity);
+            Vector3 pos = spawnPoint != null ? spawnPoint.position : Vector3.zero;
+            Instantiate(spawnPrefab, pos, Quaternion.identity);
+            DisablePlayerControl();
+        }
+
+        public void GnomeAppear()
+        {
+            if (gnomePrefab == null) { Debug.LogWarning("[GameManager] GnomeAppear: gnomePrefab no asignado."); return; }
+            Instantiate(gnomePrefab);
+        }
+
+        public void DisablePlayerControl()
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) return;
+            var controller = player.GetComponent<PlayerController2D>();
+            if (controller != null) controller.enabled = false;
+            var rb = player.GetComponent<Rigidbody2D>();
+            if (rb != null) rb.linearVelocity = Vector2.zero;
+        }
+
+        public void RestorePlayerControl()
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) return;
+            var controller = player.GetComponent<PlayerController2D>();
+            if (controller != null) controller.enabled = true;
         }
 
         public void UnlockCurrentGoal() => CurrentStage?.UnlockGoal();

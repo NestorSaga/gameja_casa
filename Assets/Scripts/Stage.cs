@@ -27,14 +27,16 @@ namespace Micasa
 
         public void UnlockGoal()
         {
-            if (goal != null) goal.enabled = true;
-            goal?.GetComponent<StageExit>()?.Unlock();
+            if (goal == null) return;
+            goal.enabled = true;
+            goal.GetComponent<StageExit>()?.Unlock();
         }
 
         public void LockGoal()
         {
-            if (goal != null) goal.enabled = false;
-            goal?.GetComponent<StageExit>()?.Lock();
+            if (goal == null) return;
+            goal.enabled = false;
+            goal.GetComponent<StageExit>()?.Lock();
         }
 
         public void ResetCollectibles()
