@@ -120,7 +120,9 @@ namespace Micasa
                 case StageAction.TogglePhysics:        Physics2D.simulationMode = Physics2D.simulationMode == SimulationMode2D.FixedUpdate
                                                            ? SimulationMode2D.Script
                                                            : SimulationMode2D.FixedUpdate;                          break;
-                case StageAction.SpawnObject:          GameManager.Instance?.SpawnObject(step.spawnPosition);       break;
+                case StageAction.SpawnObject:          GameManager.Instance?.SpawnObject();                         break;
+                case StageAction.RestorePlayerControl: GameManager.Instance?.RestorePlayerControl();                 break;
+                case StageAction.GnomeAppear:          GameManager.Instance?.GnomeAppear();                          break;
             }
         }
         private void ExecuteHostFmod(List<EventReference> toPlay, List<EventReference> toStop)

@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace Micasa
@@ -11,6 +13,16 @@ namespace Micasa
         [SerializeField] StageManager  stageManager;
         [SerializeField] GameObject    loadingScreen;
         [SerializeField] GameObject    spawnPrefab;
+        [SerializeField] Transform     spawnPoint;
+        [SerializeField] GameObject    gnomePrefab;
+        [SerializeField] TextMeshProUGUI gnomeAppearTextUI;
+
+        [Header("Gnome Appear Text")]
+        [SerializeField] private string gnomePhrase1;
+        [SerializeField] private string gnomePhrase2;
+        [SerializeField] private string gnomePhrase3;
+        [SerializeField] private float  gnomeDelay1 = 2f;
+        [SerializeField] private float  gnomeDelay2 = 2f;
 
         private HostWindowCamera hostCamera;
 
@@ -135,6 +147,7 @@ namespace Micasa
             {
                 next.gameObject.SetActive(true);
                 next.ActivatePlayer();
+                RestorePlayerControl();
                 FindAnyObjectByType<CameraPlayerSync>()?.SendStageSync();
             }
         }
@@ -156,12 +169,17 @@ namespace Micasa
             }
 
             var next = stages[CurrentStageIndex];
+            next.gameObject.SetActive(true);
+            next.ActivatePlayer();
+            RestorePlayerControl();
+            FindAnyObjectByType<CameraPlayerSync>()?.SendStageSync();
             if (next.HasData)
                 stageManager?.StartSequence(next.Data);
             else
             {
                 next.gameObject.SetActive(true);
                 next.ActivatePlayer();
+                RestorePlayerControl();
                 FindAnyObjectByType<CameraPlayerSync>()?.SendStageSync();
             }
         }
@@ -177,13 +195,54 @@ namespace Micasa
             loadingScreen?.SetActive(false);
             stage.gameObject.SetActive(true);
             stage.ActivatePlayer();
+            RestorePlayerControl();
             FindAnyObjectByType<CameraPlayerSync>()?.SendStageSync();
         }
 
-        public void SpawnObject(Vector2 position)
+        public void SpawnObject()
         {
             if (spawnPrefab == null) { Debug.LogWarning("[GameManager] SpawnObject: spawnPrefab no asignado."); return; }
-            Instantiate(spawnPrefab, position, Quaternion.identity);
+            var player = GameObject.FindGameObjectWithTag("Player");
+            Vector3 pos = player != null ? player.transform.position : Vector3.zero;
+            Instantiate(spawnPrefab, pos, Quaternion.identity);
+            DisablePlayerControl();
+        }
+
+        public void GnomeAppear()
+        {
+            if (gnomePrefab == null) { Debug.LogWarning("[GameManager] GnomeAppear: gnomePrefab no asignado."); return; }
+            Vector3 pos = spawnPoint != null ? spawnPoint.position : Vector3.zero;
+            Instantiate(gnomePrefab, pos, Quaternion.identity);
+            if (gnomeAppearTextUI != null)
+                StartCoroutine(ShowGnomePhrases());
+        }
+
+        private IEnumerator ShowGnomePhrases()
+        {
+            gnomeAppearTextUI.text = gnomePhrase1;
+            gnomeAppearTextUI.gameObject.SetActive(true);
+            yield return new WaitForSeconds(gnomeDelay1);
+            gnomeAppearTextUI.text = gnomePhrase2;
+            yield return new WaitForSeconds(gnomeDelay2);
+            gnomeAppearTextUI.text = gnomePhrase3;
+        }
+
+        public void DisablePlayerControl()
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) return;
+            var controller = player.GetComponent<PlayerController2D>();
+            if (controller != null) controller.enabled = false;
+            var rb = player.GetComponent<Rigidbody2D>();
+            if (rb != null) rb.linearVelocity = Vector2.zero;
+        }
+
+        public void RestorePlayerControl()
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null) return;
+            var controller = player.GetComponent<PlayerController2D>();
+            if (controller != null) controller.enabled = true;
         }
 
         public void UnlockCurrentGoal() => CurrentStage?.UnlockGoal();

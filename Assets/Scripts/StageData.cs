@@ -33,6 +33,8 @@ namespace Micasa
         ToggleLoadingScreen,
         TogglePhysics,
         SpawnObject,
+        RestorePlayerControl,
+        GnomeAppear,
     }
 
     [Serializable]
@@ -65,7 +67,6 @@ namespace Micasa
         public string            url;
         public TextAsset         fileTemplate;
         public string            outputFileName;
-        public Vector2           spawnPosition;
 
         [Header("Host (Main Window)")]
         public List<EventReference> hostFmodPlay = new();

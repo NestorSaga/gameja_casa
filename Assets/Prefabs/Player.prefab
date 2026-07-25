@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12d410350939e324999e5c9ca09dd31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Micasa.PlayerController2D
-  moveSpeed: 2.5
+  moveSpeed: 5
   jumpForce: 4.5
   coyoteTime: 0.15
   groundCheck: {fileID: 3990427697923560244}

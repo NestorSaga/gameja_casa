@@ -42,9 +42,18 @@ namespace Micasa
                 string value = line.Substring(idx + LinePrefix.Length).Trim();
                 if (value == expectedCode)
                 {
+                    if (GameManager.Instance == null)
+                    {
+                        Debug.LogWarning("[FileCodeChecker] Código correcto pero GameManager.Instance es null.");
+                        return;
+                    }
                     _triggered = true;
                     OnCodeCorrect.Invoke();
-                    GameManager.Instance?.LoadNextStage();
+                    GameManager.Instance.LoadNextStage();
+                }
+                else
+                {
+                    Debug.Log($"[FileCodeChecker] Código incorrecto. Leído: '{value}' | Esperado: '{expectedCode}'");
                 }
                 return;
             }

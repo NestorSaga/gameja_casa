@@ -16,7 +16,7 @@ MonoBehaviour:
   collectiblesRequired: 1
   steps:
   - delay: 2
-    actions: 17000000
+    actions: 1300000018000000
     targetVolume: 0
     url: 
     fileTemplate: {fileID: 0}

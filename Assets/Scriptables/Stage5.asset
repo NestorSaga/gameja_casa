@@ -15,13 +15,142 @@ MonoBehaviour:
   id: 6
   collectiblesRequired: 3
   steps:
-  - delay: 0
+  - delay: 1
+    actions: 1900000000000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 3
     actions: 
     targetVolume: 0
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
-    spawnPosition: {x: 0, y: 0}
+    hostFmodPlay: []
+    hostFmodStop: []
+    gnome:
+      lines:
+      - text: TE TENGO!!
+        delay: 4
+      - text: Sabes que es <b>ILEGAL</b> entrar a casa de otros?
+        delay: 4
+      - text: "Ahora s\xED que me has ensetado!! Y mucho!"
+        delay: 4
+      - text: Mereces que te diga la <b>N</b> palabra!!
+        delay: 4
+      - text: Que no me atrevo?!
+        delay: 4
+      - text: <b>Nomo</b>
+        delay: 4
+      - text: "Lo he dicho!! Llamar\xE1s a tu antivirus ahora?"
+        delay: 4
+      - text: "No te dejar\xE9. Acabar\xE9 r\xE1pido el trabajo."
+        delay: 4
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 33
+    actions: 0300000002000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 2
+    actions: 
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines:
+      - text: He visto al duende correr hasta la carpeta del juego!
+        delay: 4
+      - text: "Por favor, no dejes que rompa el c\xF3digo..."
+        delay: 4
+      - text: "No est\xE1 programado para ello!"
+        delay: 4
+      - text: "Mientras buscar\xE9 una forma de derrotarlo"
+        delay: 4
+      - text: 'Y recuerda:'
+        delay: 4
+      - text: "<b>Los poderes m\xE1gicos de duende no funcionan si lo ven!</b>"
+        delay: 4
+      - text: Aguanta, ahora vuelvo!
+        delay: 4
+      fmodPlay: []
+      fmodStop: []
+  - delay: 29
+    actions: 050000001b000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 9
+    actions: 090000001a000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
     hostFmodPlay: []
     hostFmodStop: []
     gnome:

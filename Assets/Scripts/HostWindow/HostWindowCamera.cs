@@ -408,7 +408,8 @@ namespace Micasa
                 (pt.x + cr.right  * 0.5f) / PPU,
                 (Display.main.systemHeight - pt.y - cr.bottom * 0.5f) / PPU,
                 -10f);
-            targetOrthoSize = cr.bottom * 0.5f / PPU;
+            camera.orthographicSize = cr.bottom * 0.5f / PPU;
+            targetOrthoSize         = camera.orthographicSize;
 #endif
         }
 
