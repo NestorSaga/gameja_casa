@@ -13,6 +13,7 @@ namespace Micasa
             if (AppBootstrap.CameraViewIndex >= 0) return;
             if (!other.CompareTag(playerTag)) return;
             if (GameManager.Instance == null) return;
+            if (!GameManager.Instance.StageReady) return;
             if (GameManager.Instance.CurrentStageId != triggerOnStageId) return;
 
             GameManager.Instance.LoadNextStageNoLoadingScreen();

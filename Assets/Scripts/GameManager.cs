@@ -59,6 +59,7 @@ namespace Micasa
         public int  CurrentStageIndex    { get; private set; } = 0;
         public int  CurrentStageId       => CurrentStage?.HasData == true ? CurrentStage.Data.id : -1;
         public int  CollectablesGathered { get; private set; } = 0;
+        public bool StageReady           { get; private set; } = false;
 
         Stage CurrentStage => stages.Count > 0 && CurrentStageIndex < stages.Count
             ? stages[CurrentStageIndex]
@@ -154,6 +155,7 @@ namespace Micasa
         public void LoadNextStage()
         {
             if (AppBootstrap.CameraViewIndex >= 0) return;
+            StageReady = false;
             if (CurrentStage.HasData && CurrentStage.Data.id == 2)
                 hostCamera?.StopStretch();
 
@@ -186,6 +188,7 @@ namespace Micasa
         public void LoadNextStageNoLoadingScreen()
         {
             if (AppBootstrap.CameraViewIndex >= 0) return;
+            StageReady = false;
             if (CurrentStage.HasData && CurrentStage.Data.id == 2)
                 hostCamera?.StopStretch();
 
@@ -263,6 +266,7 @@ namespace Micasa
 
         public void DisablePlayerControl()
         {
+            StageReady = false;
             var player = GameObject.FindGameObjectWithTag("Player");
             if (player == null) return;
             var controller = player.GetComponent<PlayerController2D>();
@@ -273,6 +277,7 @@ namespace Micasa
 
         public void RestorePlayerControl()
         {
+            StageReady = true;
             var player = GameObject.FindGameObjectWithTag("Player");
             if (player == null) return;
             var controller = player.GetComponent<PlayerController2D>();

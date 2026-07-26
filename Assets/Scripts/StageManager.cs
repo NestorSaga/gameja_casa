@@ -171,8 +171,7 @@ namespace Micasa
                 ? step.fileTemplate.name + ".txt"
                 : step.outputFileName;
 
-            string gameDir = System.IO.Path.GetDirectoryName(Application.dataPath);
-            string path    = System.IO.Path.Combine(gameDir, fileName);
+            string path = ResolveWritablePath(fileName);
 
             string content = step.fileTemplate.text;
             if (fileName == "escritura_de_propiedad.txt")
@@ -183,8 +182,34 @@ namespace Micasa
                 StartCoroutine(WatchEscritura(path));
             }
 
-            System.IO.File.WriteAllText(path, content, System.Text.Encoding.UTF8);
-            Debug.Log($"[StageManager] GenerateFile: archivo escrito en '{path}'.");
+            try
+            {
+                System.IO.File.WriteAllText(path, content, System.Text.Encoding.UTF8);
+                Debug.Log($"[StageManager] GenerateFile: archivo escrito en '{path}'.");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[StageManager] GenerateFile: no se pudo escribir '{path}': {e.Message}");
+            }
+        }
+
+        // Devuelve la ruta en el directorio del juego si es escribible, si no en el Escritorio.
+        private static string ResolveWritablePath(string fileName)
+        {
+            string gameDir = System.IO.Path.GetDirectoryName(Application.dataPath);
+            string path    = System.IO.Path.Combine(gameDir, fileName);
+            try
+            {
+                // Prueba de escritura: intenta crear/abrir el archivo
+                using (System.IO.File.Open(path, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write, System.IO.FileShare.None)) { }
+                return path;
+            }
+            catch
+            {
+                string desktop = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
+                Debug.LogWarning($"[StageManager] Sin permisos en '{gameDir}', usando Escritorio.");
+                return System.IO.Path.Combine(desktop, fileName);
+            }
         }
 
         private IEnumerator WatchEscritura(string path)
@@ -195,8 +220,23 @@ namespace Micasa
                 yield return new WaitForSeconds(0.5f);
                 if (!System.IO.File.Exists(path)) continue;
 
-                foreach (var line in System.IO.File.ReadAllLines(path, System.Text.Encoding.UTF8))
+                string[] lines = null;
+                try
                 {
+                    // FileShare.ReadWrite permite leer aunque el editor tenga el archivo abierto.
+                    using var fs = new System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.ReadWrite);
+                    using var sr = new System.IO.StreamReader(fs, System.Text.Encoding.UTF8);
+                    lines = sr.ReadToEnd().Split('\n');
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning($"[StageManager] WatchEscritura: no se pudo leer '{path}': {e.Message}");
+                    continue; // el coroutine sigue vivo, reintenta en 0.5s
+                }
+
+                foreach (var rawLine in lines)
+                {
+                    string line = rawLine.TrimEnd('\r');
                     if (!line.StartsWith(prefix)) continue;
                     if (line.Substring(prefix.Length).Trim().Length > 0)
                     {

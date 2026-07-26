@@ -34,6 +34,7 @@ namespace Micasa
         {
             if (AppBootstrap.CameraViewIndex >= 0) return;
             if (!unlocked) return;
+            if (!(GameManager.Instance?.StageReady ?? false)) return;
             if (other.CompareTag("Player"))
                 GameManager.Instance?.LoadNextStage();
         }
