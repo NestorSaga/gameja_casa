@@ -11,10 +11,12 @@ namespace Micasa
         [DllImport("dwmapi.dll")] static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref DwmMargins pMarInset);
         [DllImport("user32.dll", EntryPoint = "SystemParametersInfoW")]
         static extern bool SystemParametersInfoRect(uint uiAction, uint uiParam, ref WinRect pvParam, uint fWinIni);
-        [DllImport("user32.dll")] static extern uint GetWindowLong(IntPtr hWnd, int nIndex);
-        [DllImport("user32.dll")] static extern uint SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
+        [DllImport("user32.dll")] static extern uint  GetWindowLong   (IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")] static extern uint  SetWindowLong   (IntPtr hWnd, int nIndex, uint dwNewLong);
         [DllImport("user32.dll", EntryPoint = "SetWindowLongPtrW")]
         static extern IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr newProc);
+        [DllImport("user32.dll", EntryPoint = "GetWindowLongPtrW")]
+        static extern IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
         [DllImport("user32.dll", EntryPoint = "CallWindowProcW")]
         static extern IntPtr CallWindowProc(IntPtr prevProc, IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
 
@@ -24,9 +26,12 @@ namespace Micasa
         delegate IntPtr WndProcDelegate(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam);
 
         const int  GWL_STYLE        = -16;
+        const int  GWL_EXSTYLE      = -20;
         const int  GWLP_WNDPROC     = -4;
         const uint WS_CAPTION       = 0x00C00000;
         const uint WS_THICKFRAME    = 0x00040000;
+        const uint WS_EX_LAYERED    = 0x00080000;
+        const uint WS_EX_TRANSPARENT= 0x00000020;
         const uint SWP_NOSIZE       = 0x0001;
         const uint SWP_FRAMECHANGED = 0x0020;
         const uint SPI_GETWORKAREA  = 0x0030;
@@ -100,6 +105,9 @@ namespace Micasa
 
             uint style = GetWindowLong(hwnd, GWL_STYLE);
             SetWindowLong(hwnd, GWL_STYLE, style & ~(WS_CAPTION | WS_THICKFRAME));
+
+            uint exStyle = (uint)(GetWindowLongPtr(hwnd, GWL_EXSTYLE)).ToInt64();
+            SetWindowLong(hwnd, GWL_EXSTYLE, exStyle | WS_EX_LAYERED | WS_EX_TRANSPARENT);
 
             // Engancha WndProc para gestionar WM_NCHITTEST por píxel.
             wndProcDelegate = CustomWndProc;

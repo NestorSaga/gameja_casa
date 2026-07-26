@@ -36,7 +36,7 @@ MonoBehaviour:
       - text: "Aqu\xED voy!"
         delay: 4
       - text: 
-        delay: 0
+        delay: 4
       fmodPlay: []
       fmodStop: []
     gnomeophone:
@@ -84,7 +84,7 @@ MonoBehaviour:
       - text: ...si te <b>rompo</b> el juego!!
         delay: 4
       - text: 
-        delay: 0
+        delay: 4
       fmodPlay: []
       fmodStop: []
     gnomeophone:

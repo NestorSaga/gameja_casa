@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FMOD.Studio;
+using FMODUnity;
 using Micasa.Bridge;
 using TMPro;
 using UnityEngine;
@@ -29,6 +31,10 @@ namespace Micasa
 
         [Header("Firma Dialogue")]
         [SerializeField] private List<FirmaLine> firmaDialogue = new();
+
+        [Header("Gnome Appear FMOD")]
+        [SerializeField] private EventReference gnomeAppearFmod;
+        private EventInstance _gnomeAppearInst;
 
         [Header("Gnome Appear Text")]
         [SerializeField] private string gnomePhrase1;
@@ -77,6 +83,12 @@ namespace Micasa
 
         public bool AllCollected => EffectiveCollectiblesRequired > 0 &&
                                     CollectablesGathered >= EffectiveCollectiblesRequired;
+
+        void OnDestroy()
+        {
+            StopGnomeAppearFmod();
+            if (Instance == this) Instance = null;
+        }
 
         void Awake()
         {
@@ -250,6 +262,22 @@ namespace Micasa
             var clone = Instantiate(gnomePrefab, pos, Quaternion.identity);
             if (gnomeAppearTextUI != null)
                 StartCoroutine(ShowGnomePhrases(clone));
+
+            if (!gnomeAppearFmod.IsNull)
+            {
+                _gnomeAppearInst = RuntimeManager.CreateInstance(gnomeAppearFmod);
+                _gnomeAppearInst.start();
+            }
+        }
+
+        public void StopGnomeAppearFmod()
+        {
+            if (_gnomeAppearInst.isValid())
+            {
+                _gnomeAppearInst.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                _gnomeAppearInst.release();
+                _gnomeAppearInst = default;
+            }
         }
 
         private IEnumerator ShowGnomePhrases(GameObject gnome)

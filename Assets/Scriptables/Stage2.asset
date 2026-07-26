@@ -38,7 +38,7 @@ MonoBehaviour:
       - text: "Adem\xE1s eres mal\xEDsimo en todos los juegos"
         delay: 4
       - text: 
-        delay: 0
+        delay: 4
       fmodPlay: []
       fmodStop: []
     gnomeophone:
@@ -84,7 +84,7 @@ MonoBehaviour:
       - text: Pues toma caracola!
         delay: 4
       - text: 
-        delay: 0
+        delay: 4
       fmodPlay: []
       fmodStop: []
     gnomeophone:
@@ -128,7 +128,7 @@ MonoBehaviour:
       - text: No ves bien? Pues te chinchas!
         delay: 4
       - text: 
-        delay: 0
+        delay: 4
       fmodPlay: []
       fmodStop: []
     gnomeophone:
