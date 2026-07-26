@@ -27,14 +27,17 @@ MonoBehaviour:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnomeophone:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnome2:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
   - delay: 3
     actions: 
     targetVolume: 0
@@ -65,14 +68,17 @@ MonoBehaviour:
         delay: 4
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnomeophone:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnome2:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
   - delay: 35
     actions: 0300000002000000
     targetVolume: 0
@@ -85,14 +91,17 @@ MonoBehaviour:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnomeophone:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnome2:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
   - delay: 2
     actions: 
     targetVolume: 0
@@ -105,10 +114,12 @@ MonoBehaviour:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnomeophone:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnome2:
       lines:
       - text: He visto al duende correr hasta la carpeta del juego!
@@ -129,32 +140,36 @@ MonoBehaviour:
         delay: 4
       fmodPlay: []
       fmodStop: []
+      anim: 0
   - delay: 29
     actions: 050000001b000000
     targetVolume: 0
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
-    hostFmodPlay:
+    hostFmodPlay: []
+    hostFmodStop:
     - Guid:
-        Data1: -516892478
-        Data2: 1117278309
-        Data3: 1014214847
-        Data4: -618647415
-      Path: event:/gnomestep
-    hostFmodStop: []
+        Data1: -161522712
+        Data2: 1171281051
+        Data3: -1269412976
+        Data4: 1246536582
+      Path: event:/porhonga
     gnome:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnomeophone:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnome2:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
   - delay: 1
     actions: 09000000
     targetVolume: 0
@@ -167,11 +182,14 @@ MonoBehaviour:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnomeophone:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnome2:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0

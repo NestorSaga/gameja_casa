@@ -27,14 +27,17 @@ MonoBehaviour:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnomeophone:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnome2:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
   - delay: 1
     actions: 
     targetVolume: 0
@@ -43,21 +46,24 @@ MonoBehaviour:
     outputFileName: 
     hostFmodPlay:
     - Guid:
-        Data1: 1693358646
-        Data2: 1119410899
-        Data3: 1246059652
-        Data4: 224275625
-      Path: event:/goof
+        Data1: -161522712
+        Data2: 1171281051
+        Data3: -1269412976
+        Data4: 1246536582
+      Path: event:/porhonga
     hostFmodStop: []
     gnome:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnomeophone:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0
     gnome2:
       lines: []
       fmodPlay: []
       fmodStop: []
+      anim: 0

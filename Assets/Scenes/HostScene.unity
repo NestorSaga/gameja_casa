@@ -5212,6 +5212,13 @@ MonoBehaviour:
     delay: 4
   - text: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     delay: 4
+  gnomeAppearFmod:
+    Guid:
+      Data1: -516892478
+      Data2: 1117278309
+      Data3: 1014214847
+      Data4: -618647415
+    Path: event:/gnomestep
   gnomePhrase1: Este es tu fin, Hongo!
   gnomePhrase2: Y luego te toca a ti {PlayerPCName}
   gnomePhrase3: Esta... es... <b>MI CASA!</b>

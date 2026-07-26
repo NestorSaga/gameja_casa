@@ -51,9 +51,12 @@ namespace Micasa
         void ExecuteStep(StageStep step)
         {
             ExecuteHostFmod(step.hostFmodPlay, step.hostFmodStop);
-            SendWindowData(AppBootstrap.GnomeBridge,      step.gnome);
-            SendWindowData(AppBootstrap.GnomophoneBridge, step.gnomeophone);
-            SendWindowData(AppBootstrap.Gnome2Bridge,     step.gnome2);
+            SendWindowData(AppBootstrap.GnomeBridge,      step.gnome.lines);
+            SendWindowData(AppBootstrap.GnomophoneBridge, step.gnomeophone.lines);
+            SendWindowData(AppBootstrap.Gnome2Bridge,     step.gnome2.lines);
+            if (step.gnome.anim       != GnomeAnim.None)      SendAnimTrigger(AppBootstrap.GnomeBridge,      step.gnome.anim.ToString());
+            if (step.gnome2.anim      != Gnome2Anim.None)     SendAnimTrigger(AppBootstrap.Gnome2Bridge,     step.gnome2.anim.ToString());
+            if (step.gnomeophone.anim != GnomophoneAnim.None) SendAnimTrigger(AppBootstrap.GnomophoneBridge, step.gnomeophone.anim.ToString());
 
             foreach (var action in step.actions)
             {
@@ -65,20 +68,23 @@ namespace Micasa
         public void SendGnomeText(string text)
         {
             if (string.IsNullOrEmpty(text)) return;
-            var stepData = new WindowStepData();
-            stepData.lines.Add(new DialogueLine { text = text });
-            SendWindowData(AppBootstrap.GnomeBridge, stepData);
+            SendWindowData(AppBootstrap.GnomeBridge, new List<DialogueLine> { new() { text = text } });
         }
 
-        private static void SendWindowData(WindowBridge bridge, WindowStepData data)
+        private static void SendWindowData(WindowBridge bridge, List<DialogueLine> lines)
         {
             if (bridge == null || !bridge.IsConnected) return;
-
-            if (data.lines.Count > 0)
+            if (lines.Count > 0)
             {
-                var seq = new DialogueSequence { lines = data.lines };
+                var seq = new DialogueSequence { lines = lines };
                 bridge.Send(new BridgeMessage { type = "show-text-sequence", payload = JsonUtility.ToJson(seq) });
             }
+        }
+
+        private static void SendAnimTrigger(WindowBridge bridge, string triggerName)
+        {
+            if (bridge == null || !bridge.IsConnected) return;
+            bridge.Send(new BridgeMessage { type = "play-anim", payload = triggerName });
         }
 
         void ExecuteAction(StageAction action, StageStep step)
@@ -220,12 +226,16 @@ namespace Micasa
                 yield return new WaitForSeconds(0.5f);
                 if (!System.IO.File.Exists(path)) continue;
 
-                string[] lines = null;
+                string foundLine = null;
                 try
                 {
                     using var fs = new System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.ReadWrite);
-                    using var sr = new System.IO.StreamReader(fs, System.Text.Encoding.UTF8);
-                    lines = sr.ReadToEnd().Split('\n');
+                    using var sr = new System.IO.StreamReader(fs, System.Text.Encoding.UTF8, detectEncodingFromByteOrderMarks: true);
+                    string raw;
+                    while ((raw = sr.ReadLine()) != null)
+                    {
+                        if (raw.TrimStart().StartsWith(prefix)) { foundLine = raw.Trim(); break; }
+                    }
                 }
                 catch (System.Exception e)
                 {
@@ -233,18 +243,14 @@ namespace Micasa
                     continue;
                 }
 
-                foreach (var rawLine in lines)
+                if (foundLine == null) { Debug.Log("[WatchEscritura] Prefijo 'Nombre completo:' NO encontrado."); continue; }
+                string name = foundLine.Substring(foundLine.IndexOf(prefix) + prefix.Length).Trim();
+                Debug.Log($"[WatchEscritura] Leído: '{name}' | Default: '{defaultName}' | Iguales: {name == defaultName}");
+                if (name.Length > 0 && name != defaultName)
                 {
-                    string line = rawLine.TrimEnd('\r');
-                    if (!line.StartsWith(prefix)) continue;
-                    string name = line.Substring(prefix.Length).Trim();
-                    if (name.Length > 0 && name != defaultName)
-                    {
-                        var gnome = FindAnyObjectByType<ExploreWaypatroller>();
-                        GameManager.Instance?.StartFirmaDialogue(() => gnome?.Vanish());
-                        yield break;
-                    }
-                    break;
+                    var gnome = FindAnyObjectByType<ExploreWaypatroller>();
+                    GameManager.Instance?.StartFirmaDialogue(() => gnome?.Vanish());
+                    yield break;
                 }
             }
         }

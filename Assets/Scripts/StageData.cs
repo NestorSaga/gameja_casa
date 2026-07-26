@@ -5,6 +5,21 @@ using UnityEngine;
 
 namespace Micasa
 {
+    public enum GnomeAnim
+    {
+        None, eating, fnaf, nobitches, pog, scream, yapping, morshu, pc
+    }
+
+    public enum Gnome2Anim
+    {
+        None, feliz, huh, nerd, worry
+    }
+
+    public enum GnomophoneAnim
+    {
+        None, start, stop
+    }
+
     public enum StageAction
     {
         OpenGnomeWindow,
@@ -59,6 +74,33 @@ namespace Micasa
     }
 
     [Serializable]
+    public class GnomeWindowStepData
+    {
+        public List<DialogueLine>   lines    = new();
+        public List<EventReference> fmodPlay = new();
+        public List<EventReference> fmodStop = new();
+        public GnomeAnim            anim;
+    }
+
+    [Serializable]
+    public class Gnome2WindowStepData
+    {
+        public List<DialogueLine>   lines    = new();
+        public List<EventReference> fmodPlay = new();
+        public List<EventReference> fmodStop = new();
+        public Gnome2Anim           anim;
+    }
+
+    [Serializable]
+    public class GnomophoneWindowStepData
+    {
+        public List<DialogueLine>   lines    = new();
+        public List<EventReference> fmodPlay = new();
+        public List<EventReference> fmodStop = new();
+        public GnomophoneAnim       anim;
+    }
+
+    [Serializable]
     public class StageStep
     {
         public float             delay;
@@ -73,9 +115,9 @@ namespace Micasa
         public List<EventReference> hostFmodStop = new();
 
         [Header("Client Windows")]
-        public WindowStepData gnome       = new();
-        public WindowStepData gnomeophone = new();
-        public WindowStepData gnome2      = new();
+        public GnomeWindowStepData      gnome       = new();
+        public GnomophoneWindowStepData gnomeophone = new();
+        public Gnome2WindowStepData     gnome2      = new();
     }
 
     [CreateAssetMenu(fileName = "StageData", menuName = "Micasa/Stage Data")]

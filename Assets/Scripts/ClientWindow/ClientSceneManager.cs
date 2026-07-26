@@ -10,6 +10,7 @@ namespace Micasa
     public class ClientSceneManager : MonoBehaviour
     {
         [SerializeField] TMP_Text textDisplay;
+        [SerializeField] Animator animator;
 
         private readonly Dictionary<string, EventInstance> playing = new();
         private Coroutine dialogueCoroutine;
@@ -27,8 +28,9 @@ namespace Micasa
             switch (msg.type)
             {
                 case "show-text-sequence": StartTextSequence(msg.payload); break;
-                case "fmod-play": PlayFmod(msg.payload); break;
-                case "fmod-stop": StopFmod(msg.payload); break;
+                case "fmod-play":          PlayFmod(msg.payload);          break;
+                case "fmod-stop":          StopFmod(msg.payload);          break;
+                case "play-anim":          PlayAnim(msg.payload);          break;
             }
         }
 
@@ -50,6 +52,12 @@ namespace Micasa
                 textDisplay.gameObject.SetActive(true);
             }
             dialogueCoroutine = null;
+        }
+
+        private void PlayAnim(string triggerName)
+        {
+            if (animator == null || string.IsNullOrEmpty(triggerName)) return;
+            animator.SetTrigger(triggerName);
         }
 
         private void PlayFmod(string guidStr)
