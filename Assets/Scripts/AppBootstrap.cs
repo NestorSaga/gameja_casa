@@ -49,6 +49,14 @@ namespace Micasa
 
             var args = System.Environment.GetCommandLineArgs();
 
+            // Si somos la instancia host principal, matar huérfanos de sesiones anteriores.
+            bool isGnomeVariant = args.Contains("--gnome") || args.Contains("--gnomeophone") || args.Contains("--gnome2");
+            bool isCameraVariant = false;
+            for (int i = 0; i < args.Length - 1; i++) if (args[i] == "--camera") { isCameraVariant = true; break; }
+            bool isClient = args.Contains("--client");
+            if (!isGnomeVariant && !isCameraVariant && !isClient)
+                KillOrphanedGameProcesses();
+
             if (args.Contains("--gnome"))
             {
                 Screen.SetResolution(windowWidth, windowHeight, FullScreenMode.Windowed);
@@ -118,6 +126,7 @@ namespace Micasa
             int winH = sh / CameraRows;
 
             KillCameraProcesses();
+            KillOrphanedGameProcesses();
             for (int v = 0; v < CameraCount; v++)
             {
                 if (v == skipViewIndex) continue;
@@ -137,10 +146,33 @@ namespace Micasa
         {
             foreach (var p in cameraProcesses)
             {
-                try { if (!p.HasExited) p.Kill(); }
-                catch { }
+                try { if (!p.HasExited) p.Kill(); } catch { }
+                childProcesses.Remove(p);
             }
             cameraProcesses.Clear();
+        }
+
+        // Mata instancias del mismo exe que no sean el proceso actual ni gnome windows tracked.
+        // Handles orphaned camera processes from a previous crashed session.
+        private static void KillOrphanedGameProcesses()
+        {
+            try
+            {
+                int    myPid  = Process.GetCurrentProcess().Id;
+                string myName = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
+
+                var trackedPids = new System.Collections.Generic.HashSet<int>();
+                foreach (var p in childProcesses)
+                    try { if (!p.HasExited) trackedPids.Add(p.Id); } catch { }
+
+                foreach (var p in Process.GetProcessesByName(myName))
+                {
+                    if (p.Id == myPid)            continue;
+                    if (trackedPids.Contains(p.Id)) continue;
+                    try { p.Kill(); } catch { }
+                }
+            }
+            catch { }
         }
 
         private static bool OnWantsToQuit()
