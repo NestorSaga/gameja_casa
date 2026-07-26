@@ -16,12 +16,18 @@ MonoBehaviour:
   collectiblesRequired: 3
   steps:
   - delay: 0
-    actions: 
+    actions: 13000000
     targetVolume: 0
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
-    hostFmodPlay: []
+    hostFmodPlay:
+    - Guid:
+        Data1: -161522712
+        Data2: 1171281051
+        Data3: -1269412976
+        Data4: 1246536582
+      Path: event:/porhonga
     hostFmodStop: []
     gnome:
       lines: []

@@ -115,9 +115,6 @@ namespace Micasa
             if (AppBootstrap.CameraViewIndex >= 0) return;
             if (CurrentStage != null && CurrentStage.HasData)
                 stageManager?.StartSequence(CurrentStage.Data);
-            // Stage 0 has no loading screen, so the player can move immediately.
-            // Subsequent stages set StageReady via HideLoadingScreen → RestorePlayerControl.
-            RestorePlayerControl();
         }
 
         public void AddCollectable()
@@ -224,16 +221,17 @@ namespace Micasa
 
         public void LoadStageFromData(StageData data)
         {
+            loadingScreen?.SetActive(false);
+            RestorePlayerControl();
+
             var stage = stages.Find(s => s.HasData && s.Data == data);
             if (stage == null)
             {
                 Debug.LogWarning($"[GameManager] LoadStageFromData: ningún stage tiene el StageData '{data?.name}'.");
                 return;
             }
-            loadingScreen?.SetActive(false);
             stage.gameObject.SetActive(true);
             stage.ActivatePlayer();
-            RestorePlayerControl();
             FindAnyObjectByType<CameraPlayerSync>()?.SendStageSync();
         }
 

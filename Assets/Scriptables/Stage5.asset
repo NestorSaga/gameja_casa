@@ -135,7 +135,13 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
-    hostFmodPlay: []
+    hostFmodPlay:
+    - Guid:
+        Data1: -516892478
+        Data2: 1117278309
+        Data3: 1014214847
+        Data4: -618647415
+      Path: event:/gnomestep
     hostFmodStop: []
     gnome:
       lines: []

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{c38c32c5-80b3-4cc2-a000-c42e4b01521c}">
+		<property name="assetPath">
+			<value>goof.ogg</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>94.806258503401367</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{202fafcd-a47d-4b5b-8a67-f0ddf8dc1a54}</destination>
+		</relationship>
+	</object>
+</objects>

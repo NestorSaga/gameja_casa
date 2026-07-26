@@ -65,12 +65,18 @@ MonoBehaviour:
       lines: []
       fmodPlay:
       - Guid:
-          Data1: -1757616981
-          Data2: 1133767070
-          Data3: -1032140155
-          Data4: -809267173
-        Path: event:/Master/goof 2
-      fmodStop: []
+          Data1: 1693358646
+          Data2: 1119410899
+          Data3: 1246059652
+          Data4: 224275625
+        Path: event:/goof
+      fmodStop:
+      - Guid:
+          Data1: -161522712
+          Data2: 1171281051
+          Data3: -1269412976
+          Data4: 1246536582
+        Path: event:/porhonga
     gnome2:
       lines: []
       fmodPlay: []
