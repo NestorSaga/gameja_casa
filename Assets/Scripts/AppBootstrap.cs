@@ -238,9 +238,11 @@ namespace Micasa
         }
 
         public static void LaunchClientProcess()    => Launch("--client");
-        public static void LaunchGnomeWindow()      { gnomeProcess      = Launch("--gnome");                                    }
-        public static void LaunchGnomophoneWindow() { gnomophoneProcess = Launch(GnomophoneArgs());                             }
-        public static void LaunchGnome2Window()     { gnome2Process     = Launch("--gnome2");                                   }
+        public static void LaunchGnomeWindow()      { if (IsRunning(gnomeProcess))      return; gnomeProcess      = Launch("--gnome");          }
+        public static void LaunchGnomophoneWindow() { if (IsRunning(gnomophoneProcess)) return; gnomophoneProcess = Launch(GnomophoneArgs());   }
+        public static void LaunchGnome2Window()     { if (IsRunning(gnome2Process))     return; gnome2Process     = Launch("--gnome2");          }
+
+        private static bool IsRunning(Process p) => p != null && !p.HasExited;
 
         private static string GnomophoneArgs() => "--gnomeophone";
 
@@ -281,8 +283,7 @@ namespace Micasa
             {
                 FileName        = exe,
                 Arguments       = arguments,
-                UseShellExecute = true,
-                WindowStyle     = ProcessWindowStyle.Normal
+                UseShellExecute = false
             });
             if (p != null)
             {

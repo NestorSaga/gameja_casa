@@ -9,13 +9,20 @@ namespace Micasa
     {
         [DllImport("user32.dll")] static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
         [DllImport("dwmapi.dll")] static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref DwmMargins pMarInset);
-        [DllImport("user32.dll")] static extern int GetSystemMetrics(int nIndex);
-        const int SM_CYSCREEN = 1;
+        [DllImport("user32.dll", EntryPoint = "SystemParametersInfoW")]
+        static extern bool SystemParametersInfoRect(uint uiAction, uint uiParam, ref WinRect pvParam, uint fWinIni);
+        [DllImport("user32.dll")] static extern uint GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")] static extern uint SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
 
         [StructLayout(LayoutKind.Sequential)] struct DwmMargins { public int cxLeftWidth, cxRightWidth, cyTopHeight, cyBottomHeight; }
+        [StructLayout(LayoutKind.Sequential)] struct WinRect    { public int left, top, right, bottom; }
 
+        const int  GWL_STYLE        = -16;
+        const uint WS_CAPTION       = 0x00C00000;
+        const uint WS_THICKFRAME    = 0x00040000;
         const uint SWP_NOSIZE       = 0x0001;
         const uint SWP_FRAMECHANGED = 0x0020;
+        const uint SPI_GETWORKAREA  = 0x0030;
 
         static readonly IntPtr HWND_BOTTOM  = new(1);
         static readonly IntPtr HWND_TOPMOST = new(-1);
@@ -47,9 +54,14 @@ namespace Micasa
             var m = new DwmMargins { cxLeftWidth = -1, cxRightWidth = -1, cyTopHeight = -1, cyBottomHeight = -1 };
             DwmExtendFrameIntoClientArea(hwnd, ref m);
 
-            int screenH = GetSystemMetrics(SM_CYSCREEN);
-            int x = 0;
-            int y = (screenH - Screen.height) / 2;
+            uint style = GetWindowLong(hwnd, GWL_STYLE);
+            SetWindowLong(hwnd, GWL_STYLE, style & ~(WS_CAPTION | WS_THICKFRAME));
+
+            var workArea = new WinRect();
+            SystemParametersInfoRect(SPI_GETWORKAREA, 0, ref workArea, 0);
+
+            int x = workArea.left;
+            int y = workArea.top;
             SetWindowPos(hwnd, HWND_TOPMOST, x, y, Screen.width, Screen.height, SWP_FRAMECHANGED);
         }
     }

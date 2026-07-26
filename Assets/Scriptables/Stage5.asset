@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 6
   collectiblesRequired: 3
   steps:
-  - delay: 1
+  - delay: 0.5
     actions: 1900000000000000
     targetVolume: 0
     url: 
@@ -71,7 +71,7 @@ MonoBehaviour:
       lines: []
       fmodPlay: []
       fmodStop: []
-  - delay: 33
+  - delay: 35
     actions: 0300000002000000
     targetVolume: 0
     url: 
@@ -145,8 +145,8 @@ MonoBehaviour:
       lines: []
       fmodPlay: []
       fmodStop: []
-  - delay: 9
-    actions: 090000001a000000
+  - delay: 1
+    actions: 09000000
     targetVolume: 0
     url: 
     fileTemplate: {fileID: 0}

@@ -159,7 +159,7 @@ namespace Micasa
         }
 
 
-        private static void GenerateFile(StageStep step)
+        private void GenerateFile(StageStep step)
         {
             if (step.fileTemplate == null)
             {
@@ -174,8 +174,39 @@ namespace Micasa
             string gameDir = System.IO.Path.GetDirectoryName(Application.dataPath);
             string path    = System.IO.Path.Combine(gameDir, fileName);
 
-            System.IO.File.WriteAllText(path, step.fileTemplate.text, System.Text.Encoding.UTF8);
+            string content = step.fileTemplate.text;
+            if (fileName == "escritura_de_propiedad.txt")
+            {
+                content = content
+                    .Replace("+++", SystemInfo.processorType)
+                    .Replace("---", System.DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"));
+                StartCoroutine(WatchEscritura(path));
+            }
+
+            System.IO.File.WriteAllText(path, content, System.Text.Encoding.UTF8);
             Debug.Log($"[StageManager] GenerateFile: archivo escrito en '{path}'.");
+        }
+
+        private IEnumerator WatchEscritura(string path)
+        {
+            const string prefix = "Yo, el/la abajo firmante:";
+            while (true)
+            {
+                yield return new WaitForSeconds(0.5f);
+                if (!System.IO.File.Exists(path)) continue;
+
+                foreach (var line in System.IO.File.ReadAllLines(path, System.Text.Encoding.UTF8))
+                {
+                    if (!line.StartsWith(prefix)) continue;
+                    if (line.Substring(prefix.Length).Trim().Length > 0)
+                    {
+                        var gnome = FindAnyObjectByType<ExploreWaypatroller>();
+                        GameManager.Instance?.StartFirmaDialogue(() => gnome?.Vanish());
+                        yield break;
+                    }
+                    break;
+                }
+            }
         }
     }
 }

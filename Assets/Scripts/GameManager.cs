@@ -1,10 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Micasa.Bridge;
 using TMPro;
 using UnityEngine;
 
 namespace Micasa
 {
+    [Serializable]
+    public struct FirmaLine
+    {
+        public string text;
+        public float  delay;
+    }
+
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
@@ -15,7 +24,11 @@ namespace Micasa
         [SerializeField] GameObject    spawnPrefab;
         [SerializeField] Transform     spawnPoint;
         [SerializeField] GameObject    gnomePrefab;
+        [SerializeField] Transform     spawnPrefabPoint;
         [SerializeField] TextMeshProUGUI gnomeAppearTextUI;
+
+        [Header("Firma Dialogue")]
+        [SerializeField] private List<FirmaLine> firmaDialogue = new();
 
         [Header("Gnome Appear Text")]
         [SerializeField] private string gnomePhrase1;
@@ -23,12 +36,21 @@ namespace Micasa
         [SerializeField] private string gnomePhrase3;
         [SerializeField] private float  gnomeDelay1 = 2f;
         [SerializeField] private float  gnomeDelay2 = 2f;
+        [SerializeField] private float  gnomeDelay3 = 2f;
 
         private HostWindowCamera hostCamera;
 
         [Header("Stage 2 Collectible Texts")]
         [SerializeField] private string stage2Text_collectible2;
         [SerializeField] private string stage2Text_collectible3;
+
+        [Header("Last Collectible")]
+        [SerializeField] private string           lastCollectibleText;
+        [SerializeField] private List<DialogueLine> lastCollectibleGnome2Lines = new();
+
+        [Header("Intro Text")]
+        [SerializeField] private TextMeshProUGUI introTextUI;
+        [SerializeField] private string          introText;
 
         [Header("Debug")]
         [SerializeField] private bool debugMode       = false;
@@ -60,6 +82,12 @@ namespace Micasa
             if (Instance != null) { Destroy(gameObject); return; }
             Instance = this;
             hostCamera = FindAnyObjectByType<HostWindowCamera>();
+
+            if (AppBootstrap.CameraViewIndex >= 0)
+            {
+                loadingScreen?.SetActive(false);
+                return;
+            }
 
             if (debugMode)
             {
@@ -202,8 +230,7 @@ namespace Micasa
         public void SpawnObject()
         {
             if (spawnPrefab == null) { Debug.LogWarning("[GameManager] SpawnObject: spawnPrefab no asignado."); return; }
-            var player = GameObject.FindGameObjectWithTag("Player");
-            Vector3 pos = player != null ? player.transform.position : Vector3.zero;
+            Vector3 pos = spawnPrefabPoint != null ? spawnPrefabPoint.position : Vector3.zero;
             Instantiate(spawnPrefab, pos, Quaternion.identity);
             DisablePlayerControl();
         }
@@ -212,12 +239,12 @@ namespace Micasa
         {
             if (gnomePrefab == null) { Debug.LogWarning("[GameManager] GnomeAppear: gnomePrefab no asignado."); return; }
             Vector3 pos = spawnPoint != null ? spawnPoint.position : Vector3.zero;
-            Instantiate(gnomePrefab, pos, Quaternion.identity);
+            var clone = Instantiate(gnomePrefab, pos, Quaternion.identity);
             if (gnomeAppearTextUI != null)
-                StartCoroutine(ShowGnomePhrases());
+                StartCoroutine(ShowGnomePhrases(clone));
         }
 
-        private IEnumerator ShowGnomePhrases()
+        private IEnumerator ShowGnomePhrases(GameObject gnome)
         {
             gnomeAppearTextUI.text = gnomePhrase1;
             gnomeAppearTextUI.gameObject.SetActive(true);
@@ -225,6 +252,9 @@ namespace Micasa
             gnomeAppearTextUI.text = gnomePhrase2;
             yield return new WaitForSeconds(gnomeDelay2);
             gnomeAppearTextUI.text = gnomePhrase3;
+            yield return new WaitForSeconds(gnomeDelay3);
+            gnomeAppearTextUI.text = string.Empty;
+            gnome.GetComponentInChildren<ExploreWaypatroller>()?.Activate();
         }
 
         public void DisablePlayerControl()
@@ -258,6 +288,57 @@ namespace Micasa
             if (index < 0 || index >= stages.Count) return;
             for (int i = 0; i < stages.Count; i++)
                 stages[i].gameObject.SetActive(i == index);
+        }
+
+        public void ShowIntroText()
+        {
+            if (introTextUI == null) return;
+            introTextUI.text = introText;
+            introTextUI.gameObject.SetActive(true);
+        }
+
+        public void HideIntroText()
+        {
+            if (introTextUI == null) return;
+            introTextUI.text = string.Empty;
+            introTextUI.gameObject.SetActive(false);
+        }
+
+        public void OnLastCollectibleGrabbed()
+        {
+            if (gnomeAppearTextUI != null && !string.IsNullOrEmpty(lastCollectibleText))
+            {
+                gnomeAppearTextUI.text = lastCollectibleText;
+                gnomeAppearTextUI.gameObject.SetActive(true);
+            }
+
+            if (lastCollectibleGnome2Lines.Count > 0 && AppBootstrap.Gnome2Bridge != null && AppBootstrap.Gnome2Bridge.IsConnected)
+            {
+                var seq = new DialogueSequence { lines = lastCollectibleGnome2Lines };
+                AppBootstrap.Gnome2Bridge.Send(new BridgeMessage
+                {
+                    type    = "show-text-sequence",
+                    payload = JsonUtility.ToJson(seq)
+                });
+            }
+        }
+
+        public void StartFirmaDialogue(Action onComplete) => StartCoroutine(RunFirmaDialogue(onComplete));
+
+        private IEnumerator RunFirmaDialogue(Action onComplete)
+        {
+            if (gnomeAppearTextUI != null)
+            {
+                gnomeAppearTextUI.gameObject.SetActive(true);
+                foreach (var entry in firmaDialogue)
+                {
+                    gnomeAppearTextUI.text = entry.text;
+                    yield return new WaitForSeconds(entry.delay);
+                }
+                gnomeAppearTextUI.text = string.Empty;
+                gnomeAppearTextUI.gameObject.SetActive(false);
+            }
+            onComplete?.Invoke();
         }
 
         private void DeactivateAllPlayers()

@@ -21,6 +21,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines: []
       fmodPlay: []
@@ -33,12 +35,14 @@ MonoBehaviour:
       lines: []
       fmodPlay: []
       fmodStop: []
-  - delay: 5
+  - delay: 2
     actions: 
     targetVolume: 0
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines:
       - text: Maldito <b>pedo de lobo!</b>
@@ -61,6 +65,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines: []
       fmodPlay: []
@@ -79,6 +85,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 4900000, guid: e65712625f8382949b22036227cac269, type: 3}
     outputFileName: troyanomo.txt
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines:
       - text: Juego cerrado.
@@ -111,6 +119,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines: []
       fmodPlay: []
@@ -129,6 +139,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines: []
       fmodPlay: []
@@ -147,6 +159,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines: []
       fmodPlay: []
@@ -195,6 +209,8 @@ MonoBehaviour:
     url: www.google.com
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines: []
       fmodPlay: []
