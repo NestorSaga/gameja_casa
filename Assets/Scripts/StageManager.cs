@@ -213,7 +213,8 @@ namespace Micasa
 
         private IEnumerator WatchEscritura(string path)
         {
-            const string prefix = "Yo, el/la abajo firmante:";
+            const string prefix        = "Nombre completo:";
+            const string defaultName   = "Gnomalito Duéndez Sandungo";
             while (true)
             {
                 yield return new WaitForSeconds(0.5f);
@@ -222,7 +223,6 @@ namespace Micasa
                 string[] lines = null;
                 try
                 {
-                    // FileShare.ReadWrite permite leer aunque el editor tenga el archivo abierto.
                     using var fs = new System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.ReadWrite);
                     using var sr = new System.IO.StreamReader(fs, System.Text.Encoding.UTF8);
                     lines = sr.ReadToEnd().Split('\n');
@@ -230,14 +230,15 @@ namespace Micasa
                 catch (System.Exception e)
                 {
                     Debug.LogWarning($"[StageManager] WatchEscritura: no se pudo leer '{path}': {e.Message}");
-                    continue; // el coroutine sigue vivo, reintenta en 0.5s
+                    continue;
                 }
 
                 foreach (var rawLine in lines)
                 {
                     string line = rawLine.TrimEnd('\r');
                     if (!line.StartsWith(prefix)) continue;
-                    if (line.Substring(prefix.Length).Trim().Length > 0)
+                    string name = line.Substring(prefix.Length).Trim();
+                    if (name.Length > 0 && name != defaultName)
                     {
                         var gnome = FindAnyObjectByType<ExploreWaypatroller>();
                         GameManager.Instance?.StartFirmaDialogue(() => gnome?.Vanish());
