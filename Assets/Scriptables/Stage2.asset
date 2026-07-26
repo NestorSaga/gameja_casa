@@ -83,6 +83,8 @@ MonoBehaviour:
         delay: 4
       - text: Pues toma caracola!
         delay: 4
+      - text: 
+        delay: 0
       fmodPlay: []
       fmodStop: []
     gnomeophone:

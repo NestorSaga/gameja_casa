@@ -131,10 +131,18 @@ namespace Micasa
             {
                 if (ev.IsNull) continue;
                 string key = ((System.Guid)ev.Guid).ToString();
+                if (key == "00000000-0000-0000-0000-000000000000") continue;
                 if (_hostPlaying.ContainsKey(key)) continue;
-                var inst = RuntimeManager.CreateInstance(ev);
-                inst.start();
-                _hostPlaying[key] = inst;
+                try
+                {
+                    var inst = RuntimeManager.CreateInstance(ev);
+                    inst.start();
+                    _hostPlaying[key] = inst;
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"[StageManager] FMOD play error ({key}): {e.Message}");
+                }
             }
 
             foreach (var ev in toStop)
@@ -171,44 +179,43 @@ namespace Micasa
                 ? step.fileTemplate.name + ".txt"
                 : step.outputFileName;
 
-            string path = ResolveWritablePath(fileName);
-
             string content = step.fileTemplate.text;
             if (fileName == "escritura_de_propiedad.txt")
             {
                 content = content
                     .Replace("+++", SystemInfo.processorType)
                     .Replace("---", System.DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"));
-                StartCoroutine(WatchEscritura(path));
             }
 
+            string path = WriteFileWithFallback(fileName, content);
+            if (path != null && fileName == "escritura_de_propiedad.txt")
+                StartCoroutine(WatchEscritura(path));
+        }
+
+        private static string WriteFileWithFallback(string fileName, string content)
+        {
+            string gameDir = System.IO.Path.GetDirectoryName(Application.dataPath) ?? "";
+            string primary = System.IO.Path.Combine(gameDir, fileName);
             try
             {
-                System.IO.File.WriteAllText(path, content, System.Text.Encoding.UTF8);
-                Debug.Log($"[StageManager] GenerateFile: archivo escrito en '{path}'.");
+                System.IO.File.WriteAllText(primary, content, System.Text.Encoding.UTF8);
+                Debug.Log($"[StageManager] Archivo escrito en '{primary}'.");
+                return primary;
+            }
+            catch { }
+
+            string desktop  = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
+            string fallback = System.IO.Path.Combine(desktop, fileName);
+            try
+            {
+                System.IO.File.WriteAllText(fallback, content, System.Text.Encoding.UTF8);
+                Debug.LogWarning($"[StageManager] Sin permisos en '{gameDir}', archivo en Escritorio: '{fallback}'.");
+                return fallback;
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"[StageManager] GenerateFile: no se pudo escribir '{path}': {e.Message}");
-            }
-        }
-
-        // Devuelve la ruta en el directorio del juego si es escribible, si no en el Escritorio.
-        private static string ResolveWritablePath(string fileName)
-        {
-            string gameDir = System.IO.Path.GetDirectoryName(Application.dataPath);
-            string path    = System.IO.Path.Combine(gameDir, fileName);
-            try
-            {
-                // Prueba de escritura: intenta crear/abrir el archivo
-                using (System.IO.File.Open(path, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write, System.IO.FileShare.None)) { }
-                return path;
-            }
-            catch
-            {
-                string desktop = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
-                Debug.LogWarning($"[StageManager] Sin permisos en '{gameDir}', usando Escritorio.");
-                return System.IO.Path.Combine(desktop, fileName);
+                Debug.LogError($"[StageManager] No se pudo escribir '{fileName}': {e.Message}");
+                return null;
             }
         }
 
