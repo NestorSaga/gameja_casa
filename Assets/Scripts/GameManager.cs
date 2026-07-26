@@ -282,12 +282,12 @@ namespace Micasa
 
         private IEnumerator ShowGnomePhrases(GameObject gnome)
         {
-            gnomeAppearTextUI.text = gnomePhrase1;
+            gnomeAppearTextUI.text = TextResolver.Resolve(gnomePhrase1);
             gnomeAppearTextUI.gameObject.SetActive(true);
             yield return new WaitForSeconds(gnomeDelay1);
-            gnomeAppearTextUI.text = gnomePhrase2;
+            gnomeAppearTextUI.text = TextResolver.Resolve(gnomePhrase2);
             yield return new WaitForSeconds(gnomeDelay2);
-            gnomeAppearTextUI.text = gnomePhrase3;
+            gnomeAppearTextUI.text = TextResolver.Resolve(gnomePhrase3);
             yield return new WaitForSeconds(gnomeDelay3);
             gnomeAppearTextUI.text = string.Empty;
             gnome.GetComponentInChildren<ExploreWaypatroller>()?.Activate();
@@ -331,7 +331,7 @@ namespace Micasa
         public void ShowIntroText()
         {
             if (introTextUI == null) return;
-            introTextUI.text = introText;
+            introTextUI.text = TextResolver.Resolve(introText);
             introTextUI.gameObject.SetActive(true);
         }
 
@@ -346,7 +346,7 @@ namespace Micasa
         {
             if (gnomeAppearTextUI != null && !string.IsNullOrEmpty(lastCollectibleText))
             {
-                gnomeAppearTextUI.text = lastCollectibleText;
+                gnomeAppearTextUI.text = TextResolver.Resolve(lastCollectibleText);
                 gnomeAppearTextUI.gameObject.SetActive(true);
             }
 
@@ -370,7 +370,7 @@ namespace Micasa
                 gnomeAppearTextUI.gameObject.SetActive(true);
                 foreach (var entry in firmaDialogue)
                 {
-                    gnomeAppearTextUI.text = entry.text;
+                    gnomeAppearTextUI.text = TextResolver.Resolve(entry.text);
                     yield return new WaitForSeconds(entry.delay);
                 }
                 gnomeAppearTextUI.text = string.Empty;
