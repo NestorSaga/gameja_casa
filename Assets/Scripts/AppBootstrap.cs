@@ -95,7 +95,6 @@ namespace Micasa
                 return;
             }
 
-            bool isClient = args.Contains("--client");
             Screen.SetResolution(windowWidth, windowHeight, FullScreenMode.Windowed);
 
             if (isClient)
