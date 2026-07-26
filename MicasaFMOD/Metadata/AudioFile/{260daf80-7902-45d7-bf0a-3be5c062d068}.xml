@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{260daf80-7902-45d7-bf0a-3be5c062d068}">
+		<property name="assetPath">
+			<value>porhonga.ogg</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>39.797687074829931</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{202fafcd-a47d-4b5b-8a67-f0ddf8dc1a54}</destination>
+		</relationship>
+	</object>
+</objects>

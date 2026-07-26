@@ -21,6 +21,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines:
       - text: Te crees bueno o algo?
@@ -35,6 +37,8 @@ MonoBehaviour:
         delay: 4
       - text: "Adem\xE1s eres mal\xEDsimo en todos los juegos"
         delay: 4
+      - text: 
+        delay: 0
       fmodPlay: []
       fmodStop: []
     gnomeophone:
@@ -51,6 +55,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines: []
       fmodPlay: []
@@ -69,6 +75,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines:
       - text: Vas a seguir jugando?
@@ -91,6 +99,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines: []
       fmodPlay: []
@@ -109,6 +119,8 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
     gnome:
       lines:
       - text: No ves bien? Pues te chinchas!

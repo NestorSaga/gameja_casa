@@ -57,6 +57,8 @@ MonoBehaviour:
         delay: 4
       - text: "Espera que primero saco mi set\xF3fono"
         delay: 4
+      - text: 
+        delay: 0
       fmodPlay: []
       fmodStop: []
     gnomeophone:

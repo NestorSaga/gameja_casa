@@ -1,0 +1,546 @@
+fileFormatVersion: 2
+guid: 1f25d7c9e17441142a7550a83778631d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4222059527637956510
+    second: cargar_nivel_0
+  - first:
+      213: -1268337243954821712
+    second: cargar_nivel_1
+  - first:
+      213: -2997652189532434053
+    second: cargar_nivel_2
+  - first:
+      213: -4863484740666970718
+    second: cargar_nivel_3
+  - first:
+      213: 8286786011944422465
+    second: cargar_nivel_4
+  - first:
+      213: -2375348098896381407
+    second: cargar_nivel_5
+  - first:
+      213: 4219922400715952978
+    second: cargar_nivel_6
+  - first:
+      213: 2325022151803473210
+    second: cargar_nivel_7
+  - first:
+      213: 6326421187395675888
+    second: cargar_nivel_8
+  - first:
+      213: 6429804960613013518
+    second: cargar_nivel_9
+  - first:
+      213: -8389738223664486343
+    second: cargar_nivel_10
+  - first:
+      213: 8650311269610217243
+    second: cargar_nivel_11
+  - first:
+      213: -396255269007488705
+    second: cargar_nivel_12
+  - first:
+      213: -2473243740927885071
+    second: cargar_nivel_13
+  - first:
+      213: -4117684863489028270
+    second: cargar_nivel_14
+  - first:
+      213: -2618988509086111797
+    second: cargar_nivel_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: cargar_nivel_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 318
+        width: 141
+        height: 156
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2680692aa3b3865c0800000000000000
+      internalID: -4222059527637956510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_1
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 318
+        width: 140
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b5ccae1ff5f56ee0800000000000000
+      internalID: -1268337243954821712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_2
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 317
+        width: 113
+        height: 159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b715fb247333666d0800000000000000
+      internalID: -2997652189532434053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_3
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 316
+        width: 130
+        height: 158
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ad230e656e618cb0800000000000000
+      internalID: -4863484740666970718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_4
+      rect:
+        serializedVersion: 2
+        x: 733
+        y: 320
+        width: 159
+        height: 152
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14c8f9bf8f3900370800000000000000
+      internalID: 8286786011944422465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_5
+      rect:
+        serializedVersion: 2
+        x: 923
+        y: 314
+        width: 142
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12ab16b3d71190fd0800000000000000
+      internalID: -2375348098896381407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_6
+      rect:
+        serializedVersion: 2
+        x: 1091
+        y: 336
+        width: 137
+        height: 145
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 253536ab01d209a30800000000000000
+      internalID: 4219922400715952978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_7
+      rect:
+        serializedVersion: 2
+        x: 1267
+        y: 338
+        width: 143
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3d092d1453244020800000000000000
+      internalID: 2325022151803473210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_8
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 20
+        width: 180
+        height: 195
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f669361d86fbc750800000000000000
+      internalID: 6326421187395675888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_9
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 2
+        width: 144
+        height: 207
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e08126c8b814b3950800000000000000
+      internalID: 6429804960613013518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_10
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 28
+        width: 200
+        height: 175
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93826fb4989a19b80800000000000000
+      internalID: -8389738223664486343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_11
+      rect:
+        serializedVersion: 2
+        x: 764
+        y: 0
+        width: 159
+        height: 199
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1fdca5b4441c0870800000000000000
+      internalID: 8650311269610217243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_12
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 22
+        width: 161
+        height: 187
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f398e6aaee7308af0800000000000000
+      internalID: -396255269007488705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_13
+      rect:
+        serializedVersion: 2
+        x: 1215
+        y: 25
+        width: 41
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f00903ebe54dadd0800000000000000
+      internalID: -2473243740927885071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_14
+      rect:
+        serializedVersion: 2
+        x: 1273
+        y: 28
+        width: 45
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25fcbbede6b0bd6c0800000000000000
+      internalID: -4117684863489028270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cargar_nivel_15
+      rect:
+        serializedVersion: 2
+        x: 1336
+        y: 35
+        width: 56
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc7a715b3db77abd0800000000000000
+      internalID: -2618988509086111797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      cargar_nivel_0: -4222059527637956510
+      cargar_nivel_1: -1268337243954821712
+      cargar_nivel_10: -8389738223664486343
+      cargar_nivel_11: 8650311269610217243
+      cargar_nivel_12: -396255269007488705
+      cargar_nivel_13: -2473243740927885071
+      cargar_nivel_14: -4117684863489028270
+      cargar_nivel_15: -2618988509086111797
+      cargar_nivel_2: -2997652189532434053
+      cargar_nivel_3: -4863484740666970718
+      cargar_nivel_4: 8286786011944422465
+      cargar_nivel_5: -2375348098896381407
+      cargar_nivel_6: 4219922400715952978
+      cargar_nivel_7: 2325022151803473210
+      cargar_nivel_8: 6326421187395675888
+      cargar_nivel_9: 6429804960613013518
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

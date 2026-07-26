@@ -61,6 +61,8 @@ MonoBehaviour:
         delay: 4
       - text: "No te dejar\xE9. Acabar\xE9 r\xE1pido el trabajo."
         delay: 4
+      - text: 
+        delay: 0
       fmodPlay: []
       fmodStop: []
     gnomeophone:
@@ -123,6 +125,8 @@ MonoBehaviour:
         delay: 4
       - text: Aguanta, ahora vuelvo!
         delay: 4
+      - text: 
+        delay: 0
       fmodPlay: []
       fmodStop: []
   - delay: 29
