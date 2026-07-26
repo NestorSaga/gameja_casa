@@ -11,10 +11,15 @@ namespace Micasa
         [DllImport("dwmapi.dll")] static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref DwmMargins pMarInset);
         [DllImport("user32.dll", EntryPoint = "SystemParametersInfoW")]
         static extern bool SystemParametersInfoRect(uint uiAction, uint uiParam, ref WinRect pvParam, uint fWinIni);
+        [DllImport("user32.dll")] static extern uint GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")] static extern uint SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
 
         [StructLayout(LayoutKind.Sequential)] struct DwmMargins { public int cxLeftWidth, cxRightWidth, cyTopHeight, cyBottomHeight; }
         [StructLayout(LayoutKind.Sequential)] struct WinRect    { public int left, top, right, bottom; }
 
+        const int  GWL_STYLE        = -16;
+        const uint WS_CAPTION       = 0x00C00000;
+        const uint WS_THICKFRAME    = 0x00040000;
         const uint SWP_NOSIZE       = 0x0001;
         const uint SWP_FRAMECHANGED = 0x0020;
         const uint SPI_GETWORKAREA  = 0x0030;
@@ -49,6 +54,9 @@ namespace Micasa
             var m = new DwmMargins { cxLeftWidth = -1, cxRightWidth = -1, cyTopHeight = -1, cyBottomHeight = -1 };
             DwmExtendFrameIntoClientArea(hwnd, ref m);
 
+            uint style = GetWindowLong(hwnd, GWL_STYLE);
+            SetWindowLong(hwnd, GWL_STYLE, style & ~(WS_CAPTION | WS_THICKFRAME));
+
             var workArea = new WinRect();
             SystemParametersInfoRect(SPI_GETWORKAREA, 0, ref workArea, 0);
 
@@ -58,6 +66,11 @@ namespace Micasa
             {
                 x = workArea.left;
                 y = workArea.bottom - Screen.height;
+            }
+            else if (System.Array.IndexOf(args, "--gnomeophone") >= 0)
+            {
+                x = workArea.left;
+                y = workArea.top;
             }
             else
             {

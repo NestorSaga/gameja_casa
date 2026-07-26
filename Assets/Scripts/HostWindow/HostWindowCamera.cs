@@ -289,8 +289,8 @@ namespace Micasa
 
             while (true)
             {
-                yield return AnimateWindowToSize((int)(originalWidth * 1.25f), (int)(originalHeight * 0.82f), 0.6f);
-                yield return AnimateWindowToSize((int)(originalWidth * 0.82f), (int)(originalHeight * 1.25f), 0.6f);
+                yield return AnimateWindowToSize((int)(originalWidth * 1.45f), (int)(originalHeight * 0.70f), 0.6f);
+                yield return AnimateWindowToSize((int)(originalWidth * 0.70f), (int)(originalHeight * 1.45f), 0.6f);
             }
         }
 

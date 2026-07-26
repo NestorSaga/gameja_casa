@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2c08aefce295045b3b485c120c7a46, type: 3}
+  m_Name: Stage6
+  m_EditorClassIdentifier: Assembly-CSharp::Micasa.StageData
+  id: 7
+  collectiblesRequired: 1
+  steps:
+  - delay: 0
+    actions: 02000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+  - delay: 2
+    actions: 16000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 4900000, guid: 00a431582aaeb374cb5df5140a7cf947, type: 3}
+    outputFileName: escritura_de_propiedad.txt
+    hostFmodPlay: []
+    hostFmodStop: []
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines:
+      - text: '{PlayerPCName}!'
+        delay: 4
+      - text: He encontrado los papeles de la casa!
+        delay: 4
+      - text: Te los he dejado en los archivos del juego
+        delay: 4
+      - text: "R\xE1pido! Reclama <b>tu casa!</b>"
+        delay: 4
+      fmodPlay: []
+      fmodStop: []
+  - delay: 8
+    actions: 09000000
+    targetVolume: 0
+    url: 
+    fileTemplate: {fileID: 0}
+    outputFileName: 
+    hostFmodPlay: []
+    hostFmodStop: []
+    gnome:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnomeophone:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
+    gnome2:
+      lines: []
+      fmodPlay: []
+      fmodStop: []
