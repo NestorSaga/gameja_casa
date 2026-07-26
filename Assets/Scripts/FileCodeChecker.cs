@@ -29,7 +29,6 @@ namespace Micasa
             _timer += Time.deltaTime;
             if (_timer < checkInterval) return;
             _timer = 0f;
-            if (GameManager.Instance == null || !GameManager.Instance.StageReady) return;
             CheckFile();
         }
 
@@ -52,12 +51,12 @@ namespace Micasa
             {
                 if (!File.Exists(path)) continue;
 
-                string[] lines = null;
+                string firstLine = null;
                 try
                 {
                     using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                     using var sr = new StreamReader(fs, System.Text.Encoding.UTF8);
-                    lines = sr.ReadToEnd().Split('\n');
+                    firstLine = sr.ReadLine();
                 }
                 catch (System.Exception e)
                 {
@@ -65,24 +64,21 @@ namespace Micasa
                     continue;
                 }
 
-                foreach (var raw in lines)
-                {
-                    string line = raw.TrimEnd('\r');
-                    int idx = line.IndexOf(LinePrefix, System.StringComparison.Ordinal);
-                    if (idx < 0) continue;
+                if (firstLine == null) continue;
+                firstLine = firstLine.TrimEnd('\r');
+                int idx = firstLine.IndexOf(LinePrefix, System.StringComparison.Ordinal);
+                if (idx < 0) continue;
 
-                    string value = line.Substring(idx + LinePrefix.Length).Trim();
-                    if (value == expectedCode)
-                    {
-                        _triggered = true;
-                        OnCodeCorrect.Invoke();
-                        GameManager.Instance.LoadNextStage();
-                    }
-                    else
-                    {
-                        Debug.Log($"[FileCodeChecker] Código incorrecto. Leído: '{value}' | Esperado: '{expectedCode}'");
-                    }
-                    return;
+                string value = firstLine.Substring(idx + LinePrefix.Length).Trim();
+                if (value == expectedCode)
+                {
+                    _triggered = true;
+                    OnCodeCorrect.Invoke();
+                    GameManager.Instance?.LoadNextStage();
+                }
+                else
+                {
+                    Debug.Log($"[FileCodeChecker] Código incorrecto. Leído: '{value}' | Esperado: '{expectedCode}'");
                 }
                 return;
             }

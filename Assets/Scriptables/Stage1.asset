@@ -42,7 +42,13 @@ MonoBehaviour:
     fileTemplate: {fileID: 0}
     outputFileName: 
     hostFmodPlay: []
-    hostFmodStop: []
+    hostFmodStop:
+    - Guid:
+        Data1: -161522712
+        Data2: 1171281051
+        Data3: -1269412976
+        Data4: 1246536582
+      Path: event:/porhonga
     gnome:
       lines:
       - text: "Trufas y amanitas! Qu\xE9 es tanto ruido!!"
@@ -58,25 +64,13 @@ MonoBehaviour:
       - text: "Espera que primero saco mi set\xF3fono"
         delay: 4
       - text: 
-        delay: 0
+        delay: 4
       fmodPlay: []
       fmodStop: []
     gnomeophone:
       lines: []
-      fmodPlay:
-      - Guid:
-          Data1: 1693358646
-          Data2: 1119410899
-          Data3: 1246059652
-          Data4: 224275625
-        Path: event:/goof
-      fmodStop:
-      - Guid:
-          Data1: -161522712
-          Data2: 1171281051
-          Data3: -1269412976
-          Data4: 1246536582
-        Path: event:/porhonga
+      fmodPlay: []
+      fmodStop: []
     gnome2:
       lines: []
       fmodPlay: []
@@ -87,7 +81,13 @@ MonoBehaviour:
     url: 
     fileTemplate: {fileID: 0}
     outputFileName: 
-    hostFmodPlay: []
+    hostFmodPlay:
+    - Guid:
+        Data1: 1693358646
+        Data2: 1119410899
+        Data3: 1246059652
+        Data4: 224275625
+      Path: event:/goof
     hostFmodStop: []
     gnome:
       lines: []

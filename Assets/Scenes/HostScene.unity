@@ -1193,7 +1193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Micasa.FileCodeChecker
   fileName: troyanomo.txt
-  expectedCode: 42151445
+  expectedCode: ILOVEPIES
   checkInterval: 1
   OnCodeCorrect:
     m_PersistentCalls:

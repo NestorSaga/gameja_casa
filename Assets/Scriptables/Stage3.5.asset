@@ -50,7 +50,7 @@ MonoBehaviour:
       - text: "Ya est\xE1! Me he cansado de t\xED!"
         delay: 4
       - text: 
-        delay: 0
+        delay: 4
       fmodPlay: []
       fmodStop: []
     gnomeophone:
@@ -68,7 +68,13 @@ MonoBehaviour:
     fileTemplate: {fileID: 0}
     outputFileName: 
     hostFmodPlay: []
-    hostFmodStop: []
+    hostFmodStop:
+    - Guid:
+        Data1: 1693358646
+        Data2: 1119410899
+        Data3: 1246059652
+        Data4: 224275625
+      Path: event:/goof
     gnome:
       lines: []
       fmodPlay: []

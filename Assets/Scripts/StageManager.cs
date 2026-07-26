@@ -79,14 +79,6 @@ namespace Micasa
                 var seq = new DialogueSequence { lines = data.lines };
                 bridge.Send(new BridgeMessage { type = "show-text-sequence", payload = JsonUtility.ToJson(seq) });
             }
-
-            foreach (var ev in data.fmodPlay)
-                if (!ev.IsNull)
-                    bridge.Send(new BridgeMessage { type = "fmod-play", payload = ((System.Guid)ev.Guid).ToString() });
-
-            foreach (var ev in data.fmodStop)
-                if (!ev.IsNull)
-                    bridge.Send(new BridgeMessage { type = "fmod-stop", payload = ((System.Guid)ev.Guid).ToString() });
         }
 
         void ExecuteAction(StageAction action, StageStep step)
