@@ -10,6 +10,7 @@ namespace Micasa
 
         void OnTriggerEnter2D(Collider2D other)
         {
+            if (AppBootstrap.CameraViewIndex >= 0) return;
             if (!other.CompareTag(playerTag)) return;
             if (GameManager.Instance == null) return;
             if (GameManager.Instance.CurrentStageId != triggerOnStageId) return;

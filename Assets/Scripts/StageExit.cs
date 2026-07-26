@@ -8,6 +8,7 @@ namespace Micasa
 
         private SpriteRenderer sr;
         private Sprite         lockedSprite;
+        private bool           unlocked = false;
 
         void Awake()
         {
@@ -17,12 +18,14 @@ namespace Micasa
 
         public void Unlock()
         {
+            unlocked = true;
             if (sr != null && unlockedSprite != null)
                 sr.sprite = unlockedSprite;
         }
 
         public void Lock()
         {
+            unlocked = false;
             if (sr != null && lockedSprite != null)
                 sr.sprite = lockedSprite;
         }
@@ -30,6 +33,7 @@ namespace Micasa
         void OnTriggerEnter2D(Collider2D other)
         {
             if (AppBootstrap.CameraViewIndex >= 0) return;
+            if (!unlocked) return;
             if (other.CompareTag("Player"))
                 GameManager.Instance?.LoadNextStage();
         }

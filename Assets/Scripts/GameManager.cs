@@ -86,6 +86,8 @@ namespace Micasa
             if (AppBootstrap.CameraViewIndex >= 0)
             {
                 loadingScreen?.SetActive(false);
+                for (int i = 0; i < stages.Count; i++)
+                    stages[i].gameObject.SetActive(i == 0);
                 return;
             }
 
@@ -151,6 +153,7 @@ namespace Micasa
 
         public void LoadNextStage()
         {
+            if (AppBootstrap.CameraViewIndex >= 0) return;
             if (CurrentStage.HasData && CurrentStage.Data.id == 2)
                 hostCamera?.StopStretch();
 
@@ -182,6 +185,7 @@ namespace Micasa
 
         public void LoadNextStageNoLoadingScreen()
         {
+            if (AppBootstrap.CameraViewIndex >= 0) return;
             if (CurrentStage.HasData && CurrentStage.Data.id == 2)
                 hostCamera?.StopStretch();
 
